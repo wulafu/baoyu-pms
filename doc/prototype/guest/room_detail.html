@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>房源详情</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        .detail-hero { height: 250px; background: url('https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80') center/cover; position: relative; }
+        .back-circle { position: absolute; top: 40px; left: 20px; width: 36px; height: 36px; background: rgba(255,255,255,0.9); border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; }
+        
+        .detail-card { margin-top: -20px; border-radius: 20px 20px 0 0; background: #fff; padding: 24px; position: relative; }
+        
+        .amenities-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin: 20px 0; }
+        .amenity-item { text-align: center; font-size: 12px; color: #666; }
+        .amenity-icon { font-size: 20px; margin-bottom: 8px; color: #333; }
+        
+        .host-row { display: flex; align-items: center; margin-top: 20px; padding-top: 20px; border-top: 1px solid #f5f5f5; }
+        .host-avatar { width: 48px; height: 48px; border-radius: 50%; background: #eee; margin-right: 12px; }
+        
+        .bottom-bar { position: absolute; bottom: 0; width: 100%; padding: 16px 24px 30px; background: #fff; border-top: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; z-index: 100; }
+    </style>
+</head>
+<body>
+
+    <div class="device">
+        <div class="notch"></div>
+        
+        <div class="page-container" style="padding-bottom: 80px;">
+            <div class="detail-hero">
+                <div class="back-circle back-btn"><i class="fas fa-arrow-left"></i></div>
+            </div>
+            
+            <div class="detail-card">
+                <div style="font-size: 12px; color: #FF5A5F; font-weight: bold; margin-bottom: 8px;">整套房源 · 杭州</div>
+                <h2 style="margin: 0 0 12px; font-size: 22px;">云栖·山隐 | 270°全景落地窗山景大床房</h2>
+                
+                <div class="flex-row" style="margin-bottom: 20px;">
+                    <div style="font-size: 13px; color: #666;">
+                        2客人 · 1卧室 · 1张床 · 1卫生间
+                    </div>
+                    <div style="font-size: 13px; font-weight: bold;">
+                        <i class="fas fa-star" style="color: #FFC107;"></i> 4.9 (128条评价)
+                    </div>
+                </div>
+                
+                <div style="height: 1px; background: #f5f5f5; margin-bottom: 20px;"></div>
+                
+                <div style="font-weight: bold; margin-bottom: 12px;">配套设施</div>
+                <div class="amenities-grid">
+                    <div class="amenity-item">
+                        <div class="amenity-icon"><i class="fas fa-wifi"></i></div>
+                        <div>Wi-Fi</div>
+                    </div>
+                    <div class="amenity-item">
+                        <div class="amenity-icon"><i class="fas fa-wind"></i></div>
+                        <div>空调</div>
+                    </div>
+                    <div class="amenity-item">
+                        <div class="amenity-icon"><i class="fas fa-tv"></i></div>
+                        <div>投影仪</div>
+                    </div>
+                    <div class="amenity-item">
+                        <div class="amenity-icon"><i class="fas fa-key"></i></div>
+                        <div>智能锁</div>
+                    </div>
+                </div>
+                
+                <div style="font-weight: bold; margin-bottom: 12px; margin-top: 24px;">房源介绍</div>
+                <p style="font-size: 14px; color: #666; line-height: 1.6;">
+                    位于满觉陇景区核心位置，步行可达少儿公园、动物园。房间配备超大落地窗，躺在床上即可尽览山林美景。采用五星级床品，智能马桶，极米投影仪...
+                    <span class="text-primary">查看更多</span>
+                </p>
+                
+                <div class="host-row">
+                    <div class="host-avatar" style="display: flex; justify-content: center; align-items: center;"><i class="fas fa-user"></i></div>
+                    <div style="flex: 1;">
+                        <div style="font-weight: bold;">房东：Wula</div>
+                        <div style="font-size: 12px; color: #999;">超赞房东 · 回复迅速</div>
+                    </div>
+                    <button class="btn-outline" style="width: auto; padding: 8px 16px; border-radius: 8px;">联系房东</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="bottom-bar">
+            <div>
+                <div><span style="font-size: 20px; font-weight: bold; color: #FF5A5F;">¥ 899</span> <span style="font-size: 12px; color: #999;">/晚</span></div>
+                <div style="font-size: 10px; color: #666; text-decoration: underline;">10月26日 - 27日</div>
+            </div>
+            <button class="btn" style="width: 140px; background: #FF5A5F;" onclick="navigateTo('booking.html')">预 订</button>
+        </div>
+        
+        <div class="home-indicator"></div>
+    </div>
+
+    <script src="../js/app.js"></script>
+</body>
+</html>

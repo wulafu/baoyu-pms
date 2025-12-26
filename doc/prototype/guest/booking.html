@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>确认预订</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        .booking-card { background: #fff; padding: 16px; margin: 16px; border-radius: 12px; }
+        .room-summary { display: flex; gap: 12px; padding-bottom: 16px; border-bottom: 1px solid #f5f5f5; margin-bottom: 16px; }
+        .thumb { width: 80px; height: 60px; background: #eee; border-radius: 8px; }
+        
+        .price-row { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 8px; color: #666; }
+        .total-row { display: flex; justify-content: space-between; font-size: 16px; font-weight: bold; margin-top: 16px; padding-top: 16px; border-top: 1px solid #f5f5f5; }
+        
+        .input-group-clean { margin-bottom: 16px; }
+        .input-label { font-size: 12px; font-weight: bold; margin-bottom: 8px; display: block; }
+        .clean-input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; }
+    </style>
+</head>
+<body>
+
+    <div class="device">
+        <div class="notch"></div>
+        <div class="header">
+            <i class="fas fa-chevron-left header-icon back-btn"></i>
+            <div class="header-title">确认并支付</div>
+            <div style="width: 24px;"></div>
+        </div>
+        
+        <div class="page-container" style="padding-top: 0;">
+            <div class="booking-card">
+                <div class="room-summary">
+                    <div class="thumb" style="background: url('https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80') center/cover;"></div>
+                    <div>
+                        <div style="font-size: 12px; color: #999;">整套房源</div>
+                        <div style="font-size: 14px; font-weight: bold; margin: 4px 0;">云栖·山隐山景大床房</div>
+                        <div style="font-size: 12px;"><i class="fas fa-star text-primary"></i> 4.9</div>
+                    </div>
+                </div>
+                
+                <div class="flex-row">
+                    <div>
+                        <div style="font-weight: bold;">日期</div>
+                        <div style="font-size: 14px;">10.26 - 10.27</div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="font-weight: bold;">入住人</div>
+                        <div style="font-size: 14px;">2 位</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="booking-card">
+                <h3 style="margin: 0 0 16px;">入住信息</h3>
+                <div class="input-group-clean">
+                    <label class="input-label">姓名</label>
+                    <input type="text" class="clean-input" value="访客">
+                </div>
+                <div class="input-group-clean">
+                    <label class="input-label">手机号</label>
+                    <input type="text" class="clean-input" value="13900000000">
+                </div>
+            </div>
+            
+            <div class="booking-card">
+                <h3 style="margin: 0 0 16px;">价格明细</h3>
+                <div class="price-row">
+                    <span>¥ 899 x 1 晚</span>
+                    <span>¥ 899</span>
+                </div>
+                <div class="price-row">
+                    <span>清洁费</span>
+                    <span>¥ 50</span>
+                </div>
+                <div class="price-row">
+                    <span>服务费</span>
+                    <span>¥ 80</span>
+                </div>
+                <div class="total-row">
+                    <span>总价</span>
+                    <span>¥ 1,029</span>
+                </div>
+            </div>
+            
+            <div style="padding: 20px;">
+                <button class="btn" style="background: #FF5A5F;" onclick="showToast('支付成功！'); setTimeout(()=>navigateTo('guide.html'), 1500);">确认支付 ¥ 1,029</button>
+                <div style="text-align: center; margin-top: 12px; font-size: 12px; color: #999;">
+                    点击支付即代表同意房屋守则
+                </div>
+            </div>
+        </div>
+        
+        <div class="home-indicator"></div>
+    </div>
+
+    <script src="../js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>房东端 - 房态日历 (PMS Calendar)</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background: #f0f2f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .device { width: 375px; height: 812px; background: #fff; border-radius: 40px; box-shadow: 0 20px 60px rgba(0,0,0,0.1); position: relative; overflow: hidden; border: 12px solid #333; }
+        .notch { width: 150px; height: 30px; background: #333; border-radius: 0 0 20px 20px; position: absolute; top: 0; left: 50%; transform: translateX(-50%); z-index: 100; }
+        
+        /* Header */
+        .header { background: #fff; padding: 50px 16px 16px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
+        .date-selector { font-size: 18px; font-weight: 700; color: #333; display: flex; align-items: center; }
+        .date-selector span { margin-left: 6px; font-size: 12px; color: #666; }
+        .actions i { font-size: 20px; margin-left: 16px; color: #333; cursor: pointer; }
+        
+        /* Legend */
+        .legend { display: flex; padding: 10px 16px; background: #fafafa; font-size: 12px; color: #666; gap: 12px; border-bottom: 1px solid #eee; }
+        .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 4px; }
+        
+        /* Calendar Grid */
+        .calendar-container { height: calc(100% - 180px); overflow: scroll; position: relative; }
+        .grid-header { display: flex; position: sticky; top: 0; background: #fff; z-index: 10; border-bottom: 1px solid #eee; padding-left: 80px; }
+        .day-cell { min-width: 60px; text-align: center; padding: 10px 0; font-size: 12px; border-right: 1px solid #f5f5f5; }
+        .day-cell.weekend { color: #FF5252; background: #fffcfc; }
+        
+        .room-row { display: flex; border-bottom: 1px solid #f0f0f0; height: 70px; position: relative; }
+        .room-sidebar { width: 80px; background: #fff; border-right: 1px solid #eee; position: sticky; left: 0; z-index: 5; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 0 4px; box-shadow: 2px 0 5px rgba(0,0,0,0.02); }
+        .room-name { font-size: 13px; font-weight: 600; color: #333; }
+        .room-type { font-size: 10px; color: #999; margin-top: 4px; }
+        
+        .grid-cells { display: flex; }
+        .grid-cell { min-width: 60px; height: 70px; border-right: 1px solid #f9f9f9; position: relative; }
+        
+        /* Orders */
+        .order-block { position: absolute; top: 8px; height: 54px; border-radius: 6px; padding: 6px; color: #fff; font-size: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); display: flex; flex-direction: column; justify-content: center; z-index: 2; overflow: hidden; }
+        .order-airbnb { background: #FF5A5F; left: 10px; width: 110px; } /* 2 days */
+        .order-meituan { background: #FFC107; color: #333; left: 130px; width: 50px; } /* 1 day */
+        .order-ctrip { background: #2979FF; left: 10px; width: 170px; } /* 3 days */
+        
+        .guest-name { font-weight: bold; margin-bottom: 2px; white-space: nowrap; }
+        .price { opacity: 0.9; }
+        .channel-icon { position: absolute; bottom: 4px; right: 4px; font-size: 12px; opacity: 0.8; }
+
+        /* FAB */
+        .fab { width: 50px; height: 50px; background: #00BFA5; border-radius: 50%; position: absolute; bottom: 20px; right: 20px; display: flex; justify-content: center; align-items: center; color: #fff; font-size: 24px; box-shadow: 0 4px 12px rgba(0,191,165,0.4); }
+        
+        /* Bottom Nav */
+        .bottom-nav { height: 60px; background: #fff; border-top: 1px solid #eee; position: absolute; bottom: 0; width: 100%; display: flex; justify-content: space-around; align-items: center; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; color: #999; font-size: 10px; }
+        .nav-item.active { color: #00BFA5; }
+        .nav-icon { font-size: 20px; margin-bottom: 4px; }
+    </style>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+
+    <div class="device">
+        <div class="notch"></div>
+        
+        <!-- Header -->
+        <div class="header">
+            <div class="date-selector">
+                2023年 10月 <span>▼</span>
+            </div>
+            <div class="actions">
+                <i class="fas fa-filter"></i>
+                <i class="fas fa-search"></i>
+            </div>
+        </div>
+        
+        <!-- Legend -->
+        <div class="legend">
+            <div><span class="dot" style="background:#FF5A5F"></span>Airbnb</div>
+            <div><span class="dot" style="background:#2979FF"></span>携程</div>
+            <div><span class="dot" style="background:#FFC107"></span>美团</div>
+            <div><span class="dot" style="background:#ccc"></span>空房</div>
+        </div>
+        
+        <!-- Calendar -->
+        <div class="calendar-container">
+            <!-- Grid Header (Dates) -->
+            <div class="grid-header">
+                <div class="day-cell">10-01<br>周日</div>
+                <div class="day-cell">10-02<br>周一</div>
+                <div class="day-cell">10-03<br>周二</div>
+                <div class="day-cell">10-04<br>周三</div>
+                <div class="day-cell">10-05<br>周四</div>
+                <div class="day-cell weekend">10-06<br>周五</div>
+                <div class="day-cell weekend">10-07<br>周六</div>
+            </div>
+            
+            <!-- Room 101 -->
+            <div class="room-row">
+                <div class="room-sidebar">
+                    <div class="room-name">101</div>
+                    <div class="room-type">海景大床</div>
+                </div>
+                <div class="grid-cells">
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                    
+                    <!-- Airbnb Order: 2 days -->
+                    <div class="order-block order-airbnb">
+                        <div class="guest-name">王先生</div>
+                        <div class="price">¥899</div>
+                        <i class="fab fa-airbnb channel-icon"></i>
+                    </div>
+                    
+                    <!-- Meituan Order: 1 day -->
+                    <div class="order-block order-meituan">
+                        <div class="guest-name">李..</div>
+                        <div class="price">¥420</div>
+                        <i class="fas fa-cat channel-icon"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Room 102 -->
+            <div class="room-row">
+                <div class="room-sidebar">
+                    <div class="room-name">102</div>
+                    <div class="room-type">亲子套房</div>
+                </div>
+                <div class="grid-cells">
+                    <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+                    <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+                    
+                    <!-- Ctrip Order: 3 days -->
+                    <div class="order-block order-ctrip">
+                        <div class="guest-name">张小凡</div>
+                        <div class="price">¥1280</div>
+                        <i class="fas fa-tripadvisor channel-icon"></i>
+                    </div>
+                </div>
+            </div>
+            
+             <!-- Room 201 -->
+             <div class="room-row">
+                <div class="room-sidebar">
+                    <div class="room-name">201</div>
+                    <div class="room-type">标准双床</div>
+                </div>
+                <div class="grid-cells">
+                    <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+                    <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+                </div>
+            </div>
+            
+             <!-- Room 202 -->
+             <div class="room-row">
+                <div class="room-sidebar">
+                    <div class="room-name">202</div>
+                    <div class="room-type">特惠房</div>
+                </div>
+                <div class="grid-cells">
+                    <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+                    <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+                </div>
+            </div>
+            
+        </div>
+        
+        <!-- FAB -->
+        <div class="fab">+</div>
+        
+        <!-- Bottom Nav -->
+        <div class="bottom-nav">
+            <div class="nav-item active">
+                <i class="far fa-calendar-alt nav-icon"></i>
+                <span>房态</span>
+            </div>
+            <div class="nav-item">
+                <i class="far fa-list-alt nav-icon"></i>
+                <span>订单</span>
+            </div>
+            <div class="nav-item">
+                <i class="fas fa-chart-line nav-icon"></i>
+                <span>报表</span>
+            </div>
+            <div class="nav-item">
+                <i class="far fa-user nav-icon"></i>
+                <span>我的</span>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

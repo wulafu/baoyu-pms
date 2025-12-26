@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>房东端 - 渠道管理</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        .channel-item { display: flex; align-items: center; padding: 16px; border-bottom: 1px solid #f5f5f5; }
+        .channel-logo { width: 48px; height: 48px; border-radius: 8px; margin-right: 16px; display: flex; justify-content: center; align-items: center; color: #fff; font-size: 24px; }
+        .channel-info { flex: 1; }
+        .channel-name { font-size: 16px; font-weight: 600; color: #333; }
+        .channel-status { font-size: 12px; margin-top: 4px; display: flex; align-items: center; gap: 4px; }
+        
+        .switch { position: relative; display: inline-block; width: 50px; height: 28px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: #00BFA5; }
+        input:checked + .slider:before { transform: translateX(22px); }
+    </style>
+</head>
+<body>
+
+    <div class="device">
+        <div class="notch"></div>
+        <div class="header">
+            <div class="header-title" style="margin-left: 16px;">渠道直连</div>
+            <i class="fas fa-plus header-icon" onclick="showToast('添加新渠道')"></i>
+        </div>
+        
+        <div class="page-container" style="padding-top: 0;">
+            <div class="card" style="padding: 0;">
+                <!-- Airbnb -->
+                <div class="channel-item">
+                    <div class="channel-logo" style="background: #FF5A5F;"><i class="fab fa-airbnb"></i></div>
+                    <div class="channel-info">
+                        <div class="channel-name">Airbnb 爱彼迎</div>
+                        <div class="channel-status text-primary"><i class="fas fa-circle" style="font-size: 6px;"></i> 同步正常</div>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" checked onchange="showToast('状态已更新')">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                
+                <!-- Ctrip -->
+                <div class="channel-item">
+                    <div class="channel-logo" style="background: #2979FF;"><i class="fas fa-tripadvisor"></i></div>
+                    <div class="channel-info">
+                        <div class="channel-name">携程旅行</div>
+                        <div class="channel-status text-primary"><i class="fas fa-circle" style="font-size: 6px;"></i> 同步正常</div>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" checked onchange="showToast('状态已更新')">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                
+                <!-- Meituan -->
+                <div class="channel-item">
+                    <div class="channel-logo" style="background: #FFC107;"><i class="fas fa-cat"></i></div>
+                    <div class="channel-info">
+                        <div class="channel-name">美团民宿</div>
+                        <div class="channel-status text-danger"><i class="fas fa-exclamation-circle"></i> 授权已过期</div>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" onchange="showToast('请先重新授权')">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                
+                <!-- Tujia -->
+                <div class="channel-item" style="border-bottom: none;">
+                    <div class="channel-logo" style="background: #FF5722;"><i class="fas fa-home"></i></div>
+                    <div class="channel-info">
+                        <div class="channel-name">途家民宿</div>
+                        <div class="channel-status text-muted">未连接</div>
+                    </div>
+                    <div class="btn-outline" style="padding: 6px 12px; border-radius: 16px; font-size: 12px;" onclick="toggleModal('authModal')">去连接</div>
+                </div>
+            </div>
+            
+            <div style="padding: 0 20px; font-size: 12px; color: #999; line-height: 1.5;">
+                <i class="fas fa-info-circle"></i> 开启直连后，系统将自动同步房态、价格至所有已连接平台，并自动接收订单落单。
+            </div>
+        </div>
+        
+        <!-- Auth Modal -->
+        <div class="modal-overlay" id="authModal">
+            <div class="modal-content">
+                <div style="text-align: center; margin-bottom: 24px;">
+                    <div style="width: 60px; height: 60px; background: #FF5722; border-radius: 12px; display: inline-flex; justify-content: center; align-items: center; color: #fff; font-size: 30px; margin-bottom: 12px;">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <h3 style="margin: 0;">授权连接途家民宿</h3>
+                </div>
+                
+                <div class="mb-10">
+                    <input type="text" placeholder="途家账号/手机号" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; background: #f9f9f9;">
+                </div>
+                <div class="mb-10">
+                    <input type="password" placeholder="密码" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; background: #f9f9f9;">
+                </div>
+                
+                <div style="font-size: 12px; color: #999; margin-bottom: 24px;">
+                    <i class="fas fa-shield-alt"></i> 数据传输已加密，保障账号安全
+                </div>
+                
+                <button class="btn" onclick="toggleModal('authModal'); showToast('授权成功，开始同步...');">确认授权</button>
+                <div style="text-align: center; margin-top: 16px; color: #999;" onclick="toggleModal('authModal')">暂不连接</div>
+            </div>
+        </div>
+
+        <div class="tab-bar">
+            <div class="tab-item" onclick="navigateTo('calendar.html')">
+                <i class="far fa-calendar-alt tab-icon"></i>
+                <span>房态</span>
+            </div>
+            <div class="tab-item" onclick="navigateTo('orders.html')">
+                <i class="far fa-list-alt tab-icon"></i>
+                <span>订单</span>
+            </div>
+            <div class="tab-item active" onclick="navigateTo('channels.html')">
+                <i class="fas fa-network-wired tab-icon"></i>
+                <span>渠道</span>
+            </div>
+            <div class="tab-item" onclick="navigateTo('report.html')">
+                <i class="fas fa-chart-line tab-icon"></i>
+                <span>报表</span>
+            </div>
+        </div>
+        
+        <div class="home-indicator"></div>
+    </div>
+
+    <script src="../js/app.js"></script>
+</body>
+</html>

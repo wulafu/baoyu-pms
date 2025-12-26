@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>房东端 - 订单详情</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        .status-card { background: linear-gradient(135deg, #FF9800 0%, #F57C00 100%); color: #fff; padding: 24px; border-radius: 16px; margin: 16px; box-shadow: 0 8px 16px rgba(245,124,0,0.3); }
+        .status-title { font-size: 24px; font-weight: bold; margin-bottom: 8px; }
+        .action-row { display: flex; gap: 12px; margin-top: 20px; }
+        .action-btn { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4); color: #fff; padding: 8px 16px; border-radius: 20px; font-size: 12px; flex: 1; text-align: center; backdrop-filter: blur(4px); }
+        
+        .info-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #f5f5f5; }
+        .info-label { color: #999; font-size: 14px; }
+        .info-value { color: #333; font-weight: 600; font-size: 14px; }
+        
+        .avatar { width: 40px; height: 40px; background: #eee; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: bold; color: #666; }
+    </style>
+</head>
+<body>
+
+    <div class="device">
+        <div class="notch"></div>
+        <div class="header">
+            <i class="fas fa-chevron-left header-icon back-btn" onclick="history.back()"></i>
+            <div class="header-title">订单详情</div>
+            <div style="width: 24px;"></div>
+        </div>
+        
+        <div class="page-container" style="padding-top: 0;">
+            <div class="status-card">
+                <div class="status-title">待入住</div>
+                <div style="opacity: 0.9; font-size: 14px;">距离入住还有 2 天</div>
+                <div class="action-row">
+                    <div class="action-btn" onclick="showToast('已发送入住指南')">发入住指南</div>
+                    <div class="action-btn" onclick="showToast('办理入住成功')">办理入住</div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="flex-row mb-10">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div class="avatar">王</div>
+                        <div>
+                            <div style="font-weight: bold;">王先生</div>
+                            <div class="text-muted" style="font-size: 12px;">138****1234</div>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 16px;">
+                        <i class="fas fa-phone text-primary" style="font-size: 20px;" onclick="showToast('拨打电话...')"></i>
+                        <i class="fas fa-comment-alt text-primary" style="font-size: 20px;" onclick="showToast('打开聊天窗口')"></i>
+                    </div>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">来源渠道</span>
+                    <span class="info-value"><i class="fab fa-airbnb" style="color:#FF5A5F"></i> Airbnb</span>
+                </div>
+                <div class="info-row" style="border-bottom: none;">
+                    <span class="info-label">订单号</span>
+                    <span class="info-value">AB-29384723 <i class="far fa-copy text-primary"></i></span>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="info-row">
+                    <span class="info-label">入住房间</span>
+                    <span class="info-value">101 海景大床房</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">入住时间</span>
+                    <span class="info-value">10.24 (周二) 14:00</span>
+                </div>
+                <div class="info-row" style="border-bottom: none;">
+                    <span class="info-label">离店时间</span>
+                    <span class="info-value">10.26 (周四) 12:00</span>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="info-row">
+                    <span class="info-label">房费 (2晚)</span>
+                    <span class="info-value">¥ 899.00</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">清洁费</span>
+                    <span class="info-value">¥ 50.00</span>
+                </div>
+                <div class="info-row" style="border-bottom: none;">
+                    <span class="info-label" style="font-weight: bold; color: #333;">实付总额</span>
+                    <span class="info-value" style="font-size: 18px; color: #FF5252;">¥ 949.00</span>
+                </div>
+            </div>
+            
+            <div style="padding: 16px;">
+                <button class="btn btn-outline mb-10" onclick="showToast('修改订单')">修改订单</button>
+                <button class="btn btn-danger" onclick="toggleModal('cancelModal')">取消订单</button>
+            </div>
+        </div>
+        
+        <div class="home-indicator"></div>
+        
+        <!-- Cancel Modal -->
+        <div class="modal-overlay" id="cancelModal">
+            <div class="modal-content">
+                <h3 style="margin-top: 0;">确认取消订单？</h3>
+                <p class="text-muted">取消后，房源库存将自动释放同步至所有渠道。此操作不可撤销。</p>
+                <div style="display: flex; gap: 16px; margin-top: 24px;">
+                    <button class="btn btn-outline" style="flex:1" onclick="toggleModal('cancelModal')">暂不取消</button>
+                    <button class="btn btn-danger" style="flex:1" onclick="toggleModal('cancelModal'); showToast('订单已取消'); setTimeout(()=>window.history.back(), 1000);">确认取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/app.js"></script>
+</body>
+</html>

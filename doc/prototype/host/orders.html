@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <title>房东端 - 订单列表</title>
+    <link rel="stylesheet" href="../css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+    <style>
+      .filter-tabs {
+        display: flex;
+        padding: 12px 16px;
+        background: #fff;
+        border-bottom: 1px solid #f5f5f5;
+        overflow-x: auto;
+        white-space: nowrap;
+      }
+      .tab-pill {
+        padding: 6px 16px;
+        border-radius: 16px;
+        background: #f5f5f5;
+        color: #666;
+        margin-right: 8px;
+        font-size: 12px;
+      }
+      .tab-pill.active {
+        background: #e0f2f1;
+        color: #00bfa5;
+        font-weight: 600;
+      }
+
+      .order-item {
+        background: #fff;
+        padding: 16px;
+        margin-bottom: 12px;
+        border-radius: 0;
+        border-bottom: 1px solid #f5f5f5;
+      }
+      .order-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 12px;
+        font-size: 12px;
+        color: #999;
+      }
+      .order-body {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .room-info {
+        font-size: 14px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 4px;
+      }
+      .date-info {
+        font-size: 12px;
+        color: #666;
+      }
+      .price-info {
+        font-size: 16px;
+        font-weight: bold;
+        color: #333;
+      }
+      .status-badge {
+        font-size: 10px;
+        padding: 2px 6px;
+        border-radius: 4px;
+        margin-left: 8px;
+      }
+      .status-pending {
+        background: #fff3e0;
+        color: #ff9800;
+      }
+      .status-active {
+        background: #e8f5e9;
+        color: #4caf50;
+      }
+      .status-done {
+        background: #f5f5f5;
+        color: #999;
+      }
+
+      .action-bar {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+        margin-top: 12px;
+        padding-top: 12px;
+        border-top: 1px dashed #eee;
+      }
+      .sm-btn {
+        padding: 6px 12px;
+        border-radius: 14px;
+        border: 1px solid #ddd;
+        font-size: 12px;
+        color: #666;
+      }
+      .sm-btn-primary {
+        border-color: #00bfa5;
+        color: #00bfa5;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="device">
+      <div class="notch"></div>
+      <div class="status-bar">
+        <span>9:41</span>
+        <span>
+          <i class="fas fa-signal"></i>
+          <i class="fas fa-wifi"></i>
+          <i class="fas fa-battery-full"></i>
+        </span>
+      </div>
+
+      <div class="header">
+        <div class="header-title" style="margin-left: 16px">订单管理</div>
+        <i
+          class="fas fa-search header-icon"
+          onclick="showToast('搜索订单')"
+        ></i>
+      </div>
+
+      <div class="filter-tabs">
+        <div class="tab-pill active">全部</div>
+        <div class="tab-pill">待入住</div>
+        <div class="tab-pill">已入住</div>
+        <div class="tab-pill">已离店</div>
+        <div class="tab-pill">已取消</div>
+      </div>
+
+      <div
+        class="page-container"
+        style="padding-top: 0; padding-bottom: 90px; height: calc(100% - 150px)"
+      >
+        <!-- Order 1 -->
+        <div class="order-item" onclick="navigateTo('order_detail.html')">
+          <div class="order-header">
+            <span>
+              <i class="fab fa-airbnb" style="color: #ff5a5f"></i>
+              Airbnb · 王先生
+            </span>
+            <span class="status-badge status-pending">待入住</span>
+          </div>
+          <div class="order-body">
+            <div>
+              <div class="room-info">101 海景大床房</div>
+              <div class="date-info">10.24 - 10.26 (2晚)</div>
+            </div>
+            <div class="price-info">¥ 899</div>
+          </div>
+          <div class="action-bar">
+            <div class="sm-btn">联系</div>
+            <div class="sm-btn sm-btn-primary">发指南</div>
+          </div>
+        </div>
+
+        <!-- Order 2 -->
+        <div class="order-item">
+          <div class="order-header">
+            <span>
+              <i class="fas fa-tripadvisor" style="color: #2979ff"></i>
+              携程 · 张小凡
+            </span>
+            <span class="status-badge status-active">已入住</span>
+          </div>
+          <div class="order-body">
+            <div>
+              <div class="room-info">102 亲子套房</div>
+              <div class="date-info">10.25 - 10.28 (3晚)</div>
+            </div>
+            <div class="price-info">¥ 1280</div>
+          </div>
+          <div class="action-bar">
+            <div class="sm-btn">联系</div>
+            <div class="sm-btn sm-btn-primary">续住</div>
+          </div>
+        </div>
+
+        <!-- Order 3 -->
+        <div class="order-item">
+          <div class="order-header">
+            <span>
+              <i class="fas fa-cat" style="color: #ffc107"></i>
+              美团 · 李..
+            </span>
+            <span class="status-badge status-done">已离店</span>
+          </div>
+          <div class="order-body">
+            <div>
+              <div class="room-info">202 特惠房</div>
+              <div class="date-info">10.20 - 10.21 (1晚)</div>
+            </div>
+            <div class="price-info">¥ 300</div>
+          </div>
+          <div class="action-bar">
+            <div class="sm-btn">评价</div>
+            <div class="sm-btn">退押金</div>
+          </div>
+        </div>
+
+        <!-- Order 4 -->
+        <div class="order-item">
+          <div class="order-header">
+            <span>
+              <i class="fas fa-user-circle" style="color: #00bfa5"></i>
+              微店 · 陈小姐
+            </span>
+            <span class="status-badge status-pending">待入住</span>
+          </div>
+          <div class="order-body">
+            <div>
+              <div class="room-info">201 标准双床房</div>
+              <div class="date-info">10.29 - 10.30 (1晚)</div>
+            </div>
+            <div class="price-info">¥ 580</div>
+          </div>
+          <div class="action-bar">
+            <div class="sm-btn">联系</div>
+            <div class="sm-btn sm-btn-primary">发指南</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Search Modal -->
+      <div class="modal-overlay" id="searchModal">
+        <div class="modal-content">
+          <h3 style="margin-top: 0">搜索订单</h3>
+          <div class="mb-10">
+            <input
+              type="text"
+              placeholder="订单号 / 姓名 / 手机号"
+              style="
+                width: 100%;
+                padding: 12px;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                font-size: 16px;
+              "
+            />
+          </div>
+          <button
+            class="btn"
+            onclick="toggleModal('searchModal'); showToast('搜索完成')"
+          >
+            搜索
+          </button>
+          <button
+            class="btn btn-outline mt-10"
+            onclick="toggleModal('searchModal')"
+          >
+            取消
+          </button>
+        </div>
+      </div>
+
+      <div class="tab-bar">
+        <div class="tab-item" onclick="navigateTo('calendar.html')">
+          <i class="far fa-calendar-alt tab-icon"></i>
+          <span>房态</span>
+        </div>
+        <div class="tab-item active" onclick="navigateTo('orders.html')">
+          <i class="far fa-list-alt tab-icon"></i>
+          <span>订单</span>
+        </div>
+        <div class="tab-item" onclick="navigateTo('channels.html')">
+          <i class="fas fa-network-wired tab-icon"></i>
+          <span>渠道</span>
+        </div>
+        <div class="tab-item" onclick="navigateTo('report.html')">
+          <i class="fas fa-chart-line tab-icon"></i>
+          <span>报表</span>
+        </div>
+      </div>
+
+      <div class="home-indicator"></div>
+    </div>
+
+    <script src="../js/app.js"></script>
+  </body>
+</html>

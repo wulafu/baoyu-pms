@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <title>宝寓 PMS - 经营驾驶舱</title>
+    <link rel="stylesheet" href="../css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <style>
+      .stat-card {
+        background: #fff;
+        padding: 24px;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+      }
+      .stat-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 24px;
+        margin-right: 16px;
+      }
+      .stat-info h3 {
+        margin: 0;
+        font-size: 28px;
+        color: #333;
+      }
+      .stat-info p {
+        margin: 0;
+        font-size: 14px;
+        color: #999;
+      }
+
+      .chart-container {
+        height: 350px;
+        width: 100%;
+      }
+      .grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+        margin-bottom: 24px;
+      }
+      .grid-4 {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 24px;
+        margin-bottom: 24px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="logo">
+        <i class="fas fa-hotel"></i>
+        宝寓 PMS
+      </div>
+      <div class="menu">
+        <div class="menu-item active" onclick="loadPage('dashboard.html')">
+          <i class="fas fa-tachometer-alt"></i>
+          工作台
+        </div>
+        <div class="menu-item" onclick="loadPage('calendar.html')">
+          <i class="far fa-calendar-alt"></i>
+          房态日历
+        </div>
+        <div class="menu-item" onclick="loadPage('orders.html')">
+          <i class="fas fa-list"></i>
+          订单管理
+        </div>
+        <div class="menu-item" onclick="loadPage('channels.html')">
+          <i class="fas fa-network-wired"></i>
+          渠道直连
+        </div>
+        <div class="menu-item" onclick="loadPage('report.html')">
+          <i class="fas fa-chart-bar"></i>
+          经营报表
+        </div>
+        <div class="menu-item" onclick="loadPage('settings.html')">
+          <i class="fas fa-cog"></i>
+          系统设置
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main">
+      <div class="header">
+        <div class="breadcrumb">
+          <i class="fas fa-home"></i>
+          / 首页 / 工作台
+        </div>
+        <div class="user-profile">
+          <i
+            class="far fa-bell"
+            style="font-size: 18px; margin-right: 16px"
+          ></i>
+          <div class="avatar"><i class="fas fa-user"></i></div>
+          <span>管理员</span>
+        </div>
+      </div>
+
+      <div class="content-wrapper">
+        <!-- Stats -->
+        <div class="grid-4">
+          <div class="stat-card">
+            <div style="display: flex; align-items: center">
+              <div
+                class="stat-icon"
+                style="background: #e6f7ff; color: #1890ff"
+              >
+                <i class="fas fa-yen-sign"></i>
+              </div>
+              <div class="stat-info">
+                <p>今日营收</p>
+                <h3>¥ 2,480</h3>
+              </div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div style="display: flex; align-items: center">
+              <div
+                class="stat-icon"
+                style="background: #f6ffed; color: #52c41a"
+              >
+                <i class="fas fa-bed"></i>
+              </div>
+              <div class="stat-info">
+                <p>实时入住率</p>
+                <h3>85%</h3>
+              </div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div style="display: flex; align-items: center">
+              <div
+                class="stat-icon"
+                style="background: #fff7e6; color: #faad14"
+              >
+                <i class="fas fa-clipboard-list"></i>
+              </div>
+              <div class="stat-info">
+                <p>今日订单</p>
+                <h3>12</h3>
+              </div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div style="display: flex; align-items: center">
+              <div
+                class="stat-icon"
+                style="background: #f9f0ff; color: #722ed1"
+              >
+                <i class="fas fa-network-wired"></i>
+              </div>
+              <div class="stat-info">
+                <p>直连监控</p>
+                <div style="display: flex; gap: 8px; margin-top: 4px">
+                  <a
+                    href="solution_doc.html"
+                    class="text-primary"
+                    style="font-size: 12px; text-decoration: underline"
+                    >方案</a
+                  >
+                  <a
+                    href="sync_logs.html"
+                    class="text-primary"
+                    style="font-size: 12px; text-decoration: underline"
+                    >日志</a
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="grid-2">
+          <div class="card">
+            <h3 style="margin-top: 0; margin-bottom: 20px">近7日营收趋势</h3>
+            <div id="revenueChart" class="chart-container"></div>
+          </div>
+          <div class="card">
+            <h3 style="margin-top: 0; margin-bottom: 20px">渠道来源占比</h3>
+            <div id="channelChart" class="chart-container"></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              margin-bottom: 16px;
+            "
+          >
+            <h3 style="margin: 0">待办事项</h3>
+            <div
+              class="text-primary"
+              style="font-size: 14px; cursor: pointer"
+              onclick="loadPage('orders.html')"
+            >
+              查看全部
+            </div>
+          </div>
+          <table class="data-table">
+            <tbody>
+              <tr>
+                <td><span class="status-tag status-warning">待确认</span></td>
+                <td>新订单: Airbnb - 20231024005 (王先生)</td>
+                <td>刚刚</td>
+                <td>
+                  <button
+                    class="btn btn-primary btn-sm"
+                    style="padding: 4px 8px"
+                    onclick="loadPage('orders.html')"
+                  >
+                    处理
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td><span class="status-tag status-warning">待保洁</span></td>
+                <td>房间 102 退房待打扫</td>
+                <td>10分钟前</td>
+                <td>
+                  <button
+                    class="btn btn-primary btn-sm"
+                    style="padding: 4px 8px"
+                    onclick="loadPage('orders.html')"
+                  >
+                    指派
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td><span class="status-tag status-success">系统</span></td>
+                <td>美团民宿授权即将过期，请及时续期</td>
+                <td>1小时前</td>
+                <td>
+                  <button
+                    class="btn btn-default btn-sm"
+                    style="padding: 4px 8px"
+                    onclick="loadPage('channels.html')"
+                  >
+                    查看
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <script src="../js/app.js"></script>
+    <script>
+      // Init ECharts
+      document.addEventListener('DOMContentLoaded', function () {
+        // Revenue Chart
+        var revenueChart = echarts.init(
+          document.getElementById('revenueChart')
+        );
+        var revenueOption = {
+          tooltip: { trigger: 'axis' },
+          xAxis: {
+            type: 'category',
+            data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+          },
+          yAxis: { type: 'value' },
+          series: [
+            {
+              data: [1200, 1500, 1100, 1800, 2400, 3200, 2800],
+              type: 'line',
+              smooth: true,
+              itemStyle: { color: '#00BFA5' },
+              areaStyle: {
+                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                  { offset: 0, color: 'rgba(0,191,165,0.5)' },
+                  { offset: 1, color: 'rgba(0,191,165,0.0)' }
+                ])
+              }
+            }
+          ]
+        };
+        revenueChart.setOption(revenueOption);
+
+        // Channel Chart
+        var channelChart = echarts.init(
+          document.getElementById('channelChart')
+        );
+        var channelOption = {
+          tooltip: { trigger: 'item' },
+          legend: { bottom: '0%' },
+          series: [
+            {
+              name: '渠道来源',
+              type: 'pie',
+              radius: ['40%', '70%'],
+              avoidLabelOverlap: false,
+              itemStyle: {
+                borderRadius: 10,
+                borderColor: '#fff',
+                borderWidth: 2
+              },
+              label: { show: false, position: 'center' },
+              emphasis: {
+                label: { show: true, fontSize: 20, fontWeight: 'bold' }
+              },
+              data: [
+                {
+                  value: 1048,
+                  name: 'Airbnb',
+                  itemStyle: { color: '#FF5A5F' }
+                },
+                { value: 735, name: '携程', itemStyle: { color: '#2979FF' } },
+                { value: 580, name: '美团', itemStyle: { color: '#FFC107' } },
+                { value: 484, name: '微店', itemStyle: { color: '#00BFA5' } },
+                {
+                  value: 300,
+                  name: '线下Walk-in',
+                  itemStyle: { color: '#999' }
+                }
+              ]
+            }
+          ]
+        };
+        channelChart.setOption(channelOption);
+
+        // Resize charts on window resize
+        window.addEventListener('resize', function () {
+          revenueChart.resize();
+          channelChart.resize();
+        });
+      });
+    </script>
+  </body>
+</html>

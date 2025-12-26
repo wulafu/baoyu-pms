@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>宝寓 PMS - 系统设置</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        .settings-container { display: flex; gap: 24px; height: calc(100vh - 100px); }
+        .settings-nav { width: 200px; background: #fff; border-radius: 4px; padding: 8px 0; height: 100%; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+        .nav-item { padding: 12px 24px; cursor: pointer; color: #666; font-size: 14px; border-left: 3px solid transparent; }
+        .nav-item:hover { background: #f5f5f5; }
+        .nav-item.active { background: #e6f7ff; color: #1890ff; border-left-color: #1890ff; }
+        
+        .settings-content { flex: 1; background: #fff; border-radius: 4px; padding: 32px; overflow-y: auto; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+        
+        .form-group { margin-bottom: 24px; max-width: 600px; }
+        .form-label { display: block; margin-bottom: 8px; font-weight: 600; color: #333; }
+        .form-input { width: 100%; padding: 10px; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 14px; }
+        .form-hint { font-size: 12px; color: #999; margin-top: 4px; }
+        
+        .room-list { border: 1px solid #eee; border-radius: 4px; }
+        .room-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-bottom: 1px solid #eee; }
+        .room-item:last-child { border-bottom: none; }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <i class="fas fa-hotel"></i> 宝寓 PMS
+        </div>
+        <div class="menu">
+            <div class="menu-item" onclick="loadPage('dashboard.html')">
+                <i class="fas fa-tachometer-alt"></i> 工作台
+            </div>
+            <div class="menu-item" onclick="loadPage('calendar.html')">
+                <i class="far fa-calendar-alt"></i> 房态日历
+            </div>
+            <div class="menu-item" onclick="loadPage('orders.html')">
+                <i class="fas fa-list"></i> 订单管理
+            </div>
+            <div class="menu-item" onclick="loadPage('channels.html')">
+                <i class="fas fa-network-wired"></i> 渠道直连
+            </div>
+            <div class="menu-item" onclick="loadPage('report.html')">
+                <i class="fas fa-chart-bar"></i> 经营报表
+            </div>
+            <div class="menu-item active" onclick="loadPage('settings.html')">
+                <i class="fas fa-cog"></i> 系统设置
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main">
+        <div class="header">
+            <div class="breadcrumb">
+                <i class="fas fa-home"></i> / 系统设置 / 门店信息
+            </div>
+            <div class="user-profile">
+                <i class="far fa-bell" style="font-size: 18px; margin-right: 16px;"></i>
+                <div class="avatar"><i class="fas fa-user"></i></div>
+                <span>管理员</span>
+            </div>
+        </div>
+
+        <div class="content-wrapper" style="padding: 24px;">
+            <div class="settings-container">
+                <div class="settings-nav">
+                    <div class="nav-item active">门店信息</div>
+                    <div class="nav-item">房型管理</div>
+                    <div class="nav-item">价格策略</div>
+                    <div class="nav-item">员工权限</div>
+                    <div class="nav-item">打印设置</div>
+                </div>
+                
+                <div class="settings-content">
+                    <h2 style="margin-top: 0; margin-bottom: 24px;">门店基本信息</h2>
+                    
+                    <div class="form-group">
+                        <label class="form-label">门店名称</label>
+                        <input type="text" class="form-input" value="云栖·山隐民宿">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">联系电话</label>
+                        <input type="text" class="form-input" value="13800138000">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">门店地址</label>
+                        <input type="text" class="form-input" value="浙江省杭州市西湖区满觉陇路88号">
+                        <div class="form-hint">地址将显示在微店和入住指南中</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">入住/离店时间</label>
+                        <div style="display: flex; gap: 16px;">
+                            <div style="flex: 1;">
+                                <input type="time" class="form-input" value="14:00">
+                                <div class="form-hint">最早入住时间</div>
+                            </div>
+                            <div style="flex: 1;">
+                                <input type="time" class="form-input" value="12:00">
+                                <div class="form-hint">最晚离店时间</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">门店介绍</label>
+                        <textarea class="form-input" rows="4">云栖·山隐民宿位于西湖景区核心地带，四面环山，风景秀丽。配备高星级床品与卫浴，致力于为每一位客人提供像家一样的温馨体验。</textarea>
+                    </div>
+                    
+                    <div style="margin-top: 40px;">
+                        <button class="btn btn-primary" onclick="showWebToast('保存成功')">保存修改</button>
+                        <button class="btn btn-default" style="margin-left: 12px;">重置</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/app.js"></script>
+</body>
+</html>

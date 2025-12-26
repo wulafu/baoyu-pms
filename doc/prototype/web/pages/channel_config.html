@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>宝寓 PMS - 渠道配置</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        .config-container { max-width: 800px; margin: 0 auto; }
+        .step-indicator { display: flex; justify-content: space-between; margin-bottom: 32px; position: relative; }
+        .step-indicator::before { content: ''; position: absolute; top: 14px; left: 0; width: 100%; height: 2px; background: #eee; z-index: 0; }
+        .step { position: relative; z-index: 1; background: #fff; padding: 0 16px; display: flex; flex-direction: column; align-items: center; }
+        .step-num { width: 30px; height: 30px; border-radius: 50%; background: #eee; color: #999; display: flex; justify-content: center; align-items: center; font-weight: bold; margin-bottom: 8px; }
+        .step.active .step-num { background: #00BFA5; color: #fff; }
+        .step.completed .step-num { background: #E0F2F1; color: #00BFA5; }
+        .step-title { font-size: 14px; color: #999; }
+        .step.active .step-title { color: #333; font-weight: bold; }
+        
+        .config-card { background: #fff; padding: 32px; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+        
+        /* Step 1: Auth */
+        .channel-auth-header { display: flex; align-items: center; margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid #eee; }
+        .auth-logo { width: 64px; height: 64px; border-radius: 8px; margin-right: 24px; display: flex; justify-content: center; align-items: center; font-size: 32px; color: #fff; }
+        
+        /* Step 2: Mapping */
+        .mapping-table { width: 100%; border-collapse: collapse; }
+        .mapping-table th { text-align: left; padding: 12px; background: #fafafa; border-bottom: 1px solid #eee; color: #666; font-size: 12px; }
+        .mapping-table td { padding: 16px 12px; border-bottom: 1px solid #eee; }
+        .mapping-row:hover { background: #f9f9f9; }
+        
+        .select-box { width: 100%; padding: 8px; border: 1px solid #d9d9d9; border-radius: 4px; }
+        
+        /* Step 3: Rules */
+        .rule-item { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid #f5f5f5; }
+        .rule-info h4 { margin: 0 0 4px 0; }
+        .rule-info p { margin: 0; font-size: 12px; color: #999; }
+        
+        .footer-btns { display: flex; justify-content: flex-end; gap: 16px; margin-top: 32px; }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar (Simplified) -->
+    <div class="sidebar">
+        <div class="logo"><i class="fas fa-hotel"></i> 宝寓 PMS</div>
+        <div class="menu">
+            <div class="menu-item" onclick="loadPage('dashboard.html')"><i class="fas fa-tachometer-alt"></i> 工作台</div>
+            <div class="menu-item active" onclick="loadPage('channels.html')"><i class="fas fa-network-wired"></i> 渠道直连</div>
+        </div>
+    </div>
+
+    <div class="main">
+        <div class="header">
+            <div class="breadcrumb">
+                <i class="fas fa-home"></i> / 渠道管理 / 配置直连
+            </div>
+        </div>
+
+        <div class="content-wrapper">
+            <div class="config-container">
+                <div class="step-indicator">
+                    <div class="step active" id="step1-indicator">
+                        <div class="step-num">1</div>
+                        <div class="step-title">账号授权</div>
+                    </div>
+                    <div class="step" id="step2-indicator">
+                        <div class="step-num">2</div>
+                        <div class="step-title">房源映射</div>
+                    </div>
+                    <div class="step" id="step3-indicator">
+                        <div class="step-num">3</div>
+                        <div class="step-title">同步规则</div>
+                    </div>
+                </div>
+                
+                <!-- Step 1: Authorization -->
+                <div class="config-card" id="step1">
+                    <div class="channel-auth-header">
+                        <div class="auth-logo" style="background: #FF5A5F;"><i class="fab fa-airbnb"></i></div>
+                        <div>
+                            <h2 style="margin: 0 0 8px 0;">连接 Airbnb 爱彼迎</h2>
+                            <div style="color: #666;">请登录您的 Airbnb 房东账号以进行授权连接。</div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">账号</label>
+                        <input type="text" class="form-input" placeholder="Airbnb 注册邮箱/手机号">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">密码</label>
+                        <input type="password" class="form-input" placeholder="登录密码">
+                    </div>
+                    
+                    <div class="footer-btns">
+                        <button class="btn btn-default" onclick="history.back()">取消</button>
+                        <button class="btn btn-primary" onclick="nextStep(2)">授权并下一步</button>
+                    </div>
+                </div>
+                
+                <!-- Step 2: Mapping -->
+                <div class="config-card" id="step2" style="display: none;">
+                    <div style="margin-bottom: 24px;">
+                        <h3>房源映射</h3>
+                        <p style="color: #666; font-size: 14px;">将 PMS 中的房间与 Airbnb 上的房源进行关联，系统将自动同步库存。</p>
+                    </div>
+                    
+                    <table class="mapping-table">
+                        <thead>
+                            <tr>
+                                <th width="40%">PMS 本地房型</th>
+                                <th width="10%" style="text-align: center;">关联</th>
+                                <th width="50%">Airbnb 对应房源</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="mapping-row">
+                                <td>
+                                    <div style="font-weight: bold;">101 海景大床房</div>
+                                    <div style="font-size: 12px; color: #999;">标准入住 2 人</div>
+                                </td>
+                                <td style="text-align: center;"><i class="fas fa-exchange-alt text-primary"></i></td>
+                                <td>
+                                    <select class="select-box">
+                                        <option value="">请选择对应房源...</option>
+                                        <option value="1" selected>【超赞房东】一线海景/落地窗/情侣大床房</option>
+                                        <option value="2">暂不关联</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr class="mapping-row">
+                                <td>
+                                    <div style="font-weight: bold;">102 亲子套房</div>
+                                    <div style="font-size: 12px; color: #999;">标准入住 3 人</div>
+                                </td>
+                                <td style="text-align: center;"><i class="fas fa-exchange-alt text-primary"></i></td>
+                                <td>
+                                    <select class="select-box">
+                                        <option value="">请选择对应房源...</option>
+                                        <option value="1">【超赞房东】一线海景/落地窗/情侣大床房</option>
+                                        <option value="2" selected>温馨亲子房/带滑梯/近海边</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class="footer-btns">
+                        <button class="btn btn-default" onclick="prevStep(1)">上一步</button>
+                        <button class="btn btn-primary" onclick="nextStep(3)">保存并下一步</button>
+                    </div>
+                </div>
+                
+                <!-- Step 3: Rules -->
+                <div class="config-card" id="step3" style="display: none;">
+                    <div style="margin-bottom: 24px;">
+                        <h3>同步规则设置</h3>
+                        <p style="color: #666; font-size: 14px;">配置价格和库存的同步策略。</p>
+                    </div>
+                    
+                    <div class="rule-item">
+                        <div class="rule-info">
+                            <h4>库存自动同步</h4>
+                            <p>本地产生订单时，自动扣减 Airbnb 库存；Airbnb 产生订单时，自动锁本地房。</p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="rule-item">
+                        <div class="rule-info">
+                            <h4>价格加价率</h4>
+                            <p>同步到 Airbnb 的价格将在本地价格基础上增加一定比例（用于覆盖平台佣金）。</p>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <input type="number" value="15" style="width: 60px; padding: 4px; border: 1px solid #ddd; border-radius: 4px;">
+                            <span>%</span>
+                        </div>
+                    </div>
+                    
+                    <div class="rule-item">
+                        <div class="rule-info">
+                            <h4>保留房设置</h4>
+                            <p>当本地库存少于 N 间时，显示为满房，避免超售。</p>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span>少于</span>
+                            <input type="number" value="0" style="width: 50px; padding: 4px; border: 1px solid #ddd; border-radius: 4px;">
+                            <span>间</span>
+                        </div>
+                    </div>
+                    
+                    <div class="footer-btns">
+                        <button class="btn btn-default" onclick="prevStep(2)">上一步</button>
+                        <button class="btn btn-primary" onclick="finishConfig()">完成设置</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/app.js"></script>
+    <script>
+        function nextStep(step) {
+            // Hide all steps
+            document.getElementById('step1').style.display = 'none';
+            document.getElementById('step2').style.display = 'none';
+            document.getElementById('step3').style.display = 'none';
+            
+            // Show target step
+            document.getElementById('step' + step).style.display = 'block';
+            
+            // Update indicators
+            updateIndicators(step);
+        }
+        
+        function prevStep(step) {
+            nextStep(step);
+        }
+        
+        function updateIndicators(currentStep) {
+            for(let i=1; i<=3; i++) {
+                const el = document.getElementById('step' + i + '-indicator');
+                el.classList.remove('active', 'completed');
+                if(i < currentStep) el.classList.add('completed');
+                if(i === currentStep) el.classList.add('active');
+            }
+        }
+        
+        function finishConfig() {
+            alert('配置成功！渠道已连接。');
+            window.location.href = 'channels.html';
+        }
+    </script>
+</body>
+</html>

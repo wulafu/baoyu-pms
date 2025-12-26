@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>宝寓 PMS - 经营报表</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <style>
+        .filter-row { display: flex; gap: 16px; margin-bottom: 24px; align-items: center; background: #fff; padding: 16px; border-radius: 4px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+        .chart-lg { height: 400px; width: 100%; }
+        .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-bottom: 24px; }
+        .kpi-card { background: #fff; padding: 24px; border-radius: 4px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); text-align: center; }
+        .kpi-title { color: #999; font-size: 14px; margin-bottom: 8px; }
+        .kpi-value { font-size: 32px; font-weight: bold; color: #333; margin-bottom: 8px; }
+        .kpi-trend { font-size: 12px; }
+        .trend-up { color: #f5222d; }
+        .trend-down { color: #52c41a; }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <i class="fas fa-hotel"></i> 宝寓 PMS
+        </div>
+        <div class="menu">
+            <div class="menu-item" onclick="loadPage('dashboard.html')">
+                <i class="fas fa-tachometer-alt"></i> 工作台
+            </div>
+            <div class="menu-item" onclick="loadPage('calendar.html')">
+                <i class="far fa-calendar-alt"></i> 房态日历
+            </div>
+            <div class="menu-item" onclick="loadPage('orders.html')">
+                <i class="fas fa-list"></i> 订单管理
+            </div>
+            <div class="menu-item" onclick="loadPage('channels.html')">
+                <i class="fas fa-network-wired"></i> 渠道直连
+            </div>
+            <div class="menu-item active" onclick="loadPage('report.html')">
+                <i class="fas fa-chart-bar"></i> 经营报表
+            </div>
+            <div class="menu-item" onclick="loadPage('settings.html')">
+                <i class="fas fa-cog"></i> 系统设置
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main">
+        <div class="header">
+            <div class="breadcrumb">
+                <i class="fas fa-home"></i> / 数据中心 / 经营报表
+            </div>
+            <div class="user-profile">
+                <i class="far fa-bell" style="font-size: 18px; margin-right: 16px;"></i>
+                <div class="avatar"><i class="fas fa-user"></i></div>
+                <span>管理员</span>
+            </div>
+        </div>
+
+        <div class="content-wrapper">
+            <!-- Filter -->
+            <div class="filter-row">
+                <div style="font-weight: bold;">统计时间:</div>
+                <button class="btn btn-primary">近7天</button>
+                <button class="btn btn-default">本月</button>
+                <button class="btn btn-default">上月</button>
+                <input type="date" class="btn btn-default" style="width: auto;">
+                <span>至</span>
+                <input type="date" class="btn btn-default" style="width: auto;">
+                <button class="btn btn-primary" style="margin-left: auto;"><i class="fas fa-download"></i> 导出报表</button>
+            </div>
+
+            <!-- KPIs -->
+            <div class="kpi-row">
+                <div class="kpi-card">
+                    <div class="kpi-title">总营收 (GMV)</div>
+                    <div class="kpi-value">¥ 128,450</div>
+                    <div class="kpi-trend trend-up"><i class="fas fa-arrow-up"></i> 15.2% 环比增长</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-title">平均入住率 (OCC)</div>
+                    <div class="kpi-value">82.4%</div>
+                    <div class="kpi-trend trend-up"><i class="fas fa-arrow-up"></i> 3.1% 环比增长</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-title">平均房价 (ADR)</div>
+                    <div class="kpi-value">¥ 580</div>
+                    <div class="kpi-trend trend-down"><i class="fas fa-arrow-down"></i> 1.5% 环比下降</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-title">单房收益 (RevPAR)</div>
+                    <div class="kpi-value">¥ 478</div>
+                    <div class="kpi-trend trend-up"><i class="fas fa-arrow-up"></i> 8.4% 环比增长</div>
+                </div>
+            </div>
+
+            <!-- Main Chart -->
+            <div class="card">
+                <h3 style="margin-top: 0; margin-bottom: 24px;">营收与入住率趋势</h3>
+                <div id="mainChart" class="chart-lg"></div>
+            </div>
+
+            <!-- Sub Charts -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+                <div class="card">
+                    <h3 style="margin-top: 0; margin-bottom: 24px;">房型收益贡献</h3>
+                    <div id="roomTypeChart" style="height: 300px;"></div>
+                </div>
+                <div class="card">
+                    <h3 style="margin-top: 0; margin-bottom: 24px;">订单来源渠道</h3>
+                    <div id="sourceChart" style="height: 300px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Main Chart
+            var mainChart = echarts.init(document.getElementById('mainChart'));
+            var mainOption = {
+                tooltip: { trigger: 'axis', axisPointer: { type: 'cross' } },
+                legend: { data: ['营收 (元)', '入住率 (%)'] },
+                xAxis: { type: 'category', data: ['10-01', '10-02', '10-03', '10-04', '10-05', '10-06', '10-07'] },
+                yAxis: [
+                    { type: 'value', name: '营收', position: 'left', axisLabel: { formatter: '{value}' } },
+                    { type: 'value', name: '入住率', min: 0, max: 100, position: 'right', axisLabel: { formatter: '{value} %' } }
+                ],
+                series: [
+                    { name: '营收 (元)', type: 'bar', data: [4500, 5200, 6800, 6500, 5900, 7200, 4800], itemStyle: { color: '#00BFA5' } },
+                    { name: '入住率 (%)', type: 'line', yAxisIndex: 1, data: [85, 90, 98, 95, 88, 99, 82], itemStyle: { color: '#FF9800' }, smooth: true }
+                ]
+            };
+            mainChart.setOption(mainOption);
+
+            // Room Type Chart
+            var roomTypeChart = echarts.init(document.getElementById('roomTypeChart'));
+            roomTypeChart.setOption({
+                tooltip: { trigger: 'item' },
+                series: [{
+                    type: 'pie', radius: ['40%', '70%'],
+                    data: [
+                        { value: 45000, name: '海景大床房' },
+                        { value: 38000, name: '亲子套房' },
+                        { value: 28000, name: '标准双床房' },
+                        { value: 17450, name: '特惠房' }
+                    ]
+                }]
+            });
+
+            // Source Chart
+            var sourceChart = echarts.init(document.getElementById('sourceChart'));
+            sourceChart.setOption({
+                tooltip: { trigger: 'item' },
+                series: [{
+                    type: 'pie', radius: '60%',
+                    data: [
+                        { value: 40, name: 'Airbnb', itemStyle: { color: '#FF5A5F' } },
+                        { value: 30, name: '携程', itemStyle: { color: '#2979FF' } },
+                        { value: 20, name: '美团', itemStyle: { color: '#FFC107' } },
+                        { value: 10, name: '微店/其他', itemStyle: { color: '#00BFA5' } }
+                    ]
+                }]
+            });
+
+            window.addEventListener('resize', () => {
+                mainChart.resize();
+                roomTypeChart.resize();
+                sourceChart.resize();
+            });
+        });
+    </script>
+</body>
+</html>

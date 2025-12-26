@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>宝寓 PMS - 多渠道直连解决方案</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        .doc-container { max-width: 1000px; margin: 0 auto; padding: 40px; background: #fff; min-height: 100vh; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
+        .doc-header { text-align: center; border-bottom: 1px solid #eee; padding-bottom: 30px; margin-bottom: 40px; }
+        .doc-title { font-size: 32px; font-weight: bold; color: #333; margin-bottom: 10px; }
+        .doc-meta { color: #999; font-size: 14px; }
+        
+        .section { margin-bottom: 50px; }
+        .section-title { font-size: 24px; font-weight: bold; color: #333; margin-bottom: 20px; border-left: 5px solid #00BFA5; padding-left: 15px; }
+        .section-content { font-size: 16px; color: #555; line-height: 1.8; }
+        
+        .feature-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; margin-top: 20px; }
+        .feature-card { background: #f9f9f9; padding: 20px; border-radius: 8px; border: 1px solid #eee; }
+        .feature-card h4 { margin: 0 0 10px 0; color: #333; }
+        
+        .arch-diagram { background: #f0f8ff; padding: 30px; border-radius: 8px; text-align: center; margin: 20px 0; font-family: monospace; border: 1px dashed #1890ff; color: #1890ff; }
+        
+        .table-custom { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        .table-custom th, .table-custom td { border: 1px solid #eee; padding: 12px; text-align: left; }
+        .table-custom th { background: #fafafa; font-weight: 600; }
+        
+        .tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 12px; margin-right: 5px; }
+        .tag-api { background: #e6f7ff; color: #1890ff; border: 1px solid #91d5ff; }
+        .tag-ical { background: #fff7e6; color: #faad14; border: 1px solid #ffe58f; }
+        
+        .toc { background: #f5f5f5; padding: 20px; border-radius: 8px; margin-bottom: 40px; }
+        .toc ul { margin: 0; padding-left: 20px; }
+        .toc li { margin-bottom: 8px; }
+        .toc a { color: #00BFA5; text-decoration: none; }
+        .toc a:hover { text-decoration: underline; }
+
+        .back-btn { position: fixed; top: 20px; right: 20px; background: #333; color: #fff; padding: 10px 20px; border-radius: 30px; text-decoration: none; box-shadow: 0 4px 12px rgba(0,0,0,0.2); transition: all 0.3s; }
+        .back-btn:hover { background: #000; transform: translateY(-2px); }
+    </style>
+</head>
+<body>
+
+    <a href="channels.html" class="back-btn"><i class="fas fa-arrow-left"></i> 返回控制台</a>
+
+    <div class="doc-container">
+        <div class="doc-header">
+            <div class="doc-title">宝寓 PMS 多渠道直连解决方案</div>
+            <div class="doc-meta">版本 V1.0 | 更新日期：2023-10-26 | 状态：已发布</div>
+        </div>
+        
+        <div class="toc">
+            <h3 style="margin-top: 0;">目录</h3>
+            <ul>
+                <li><a href="#bg">1. 业务背景与痛点</a></li>
+                <li><a href="#arch">2. 总体架构设计</a></li>
+                <li><a href="#core">3. 核心功能模块详解</a></li>
+                <li><a href="#platform">4. 各平台对接策略 (Airbnb/Ctrip/Meituan)</a></li>
+                <li><a href="#risk">5. 异常处理与风控机制</a></li>
+            </ul>
+        </div>
+        
+        <div class="section" id="bg">
+            <div class="section-title">1. 业务背景与痛点</div>
+            <div class="section-content">
+                <p>随着民宿业务的扩张，房东通常会在多个 OTA 平台（Airbnb, 携程, 美团, 途家等）同时上架房源以获取最大流量。然而，多平台运营带来了显著的管理成本和风险：</p>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4><i class="fas fa-exclamation-triangle" style="color: #FF5252;"></i> 频繁超售 (Overbooking)</h4>
+                        <p>一个平台出单后，未能及时关闭其他平台库存，导致同一房间被重复预订，引发客诉和平台处罚。</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4><i class="fas fa-sync-alt" style="color: #FF9800;"></i> 维护成本高</h4>
+                        <p>每次改价或调整库存，需登录 4-5 个后台重复操作，效率极低且容易出错。</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4><i class="fas fa-eye-slash" style="color: #999;"></i> 房态不透明</h4>
+                        <p>缺乏统一的房态视图，难以全局把控经营状况，影响收益管理策略的制定。</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4><i class="fas fa-chart-line" style="color: #2979FF;"></i> 财务对账难</h4>
+                        <p>各平台结算规则不一，订单分散，财务核对工作量巨大。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section" id="arch">
+            <div class="section-title">2. 总体架构设计</div>
+            <div class="section-content">
+                <p>本方案采用 <strong>Central Switch (中央交换机)</strong> 架构，PMS 作为唯一的数据源头 (Single Source of Truth)，通过双向 API 实时同步各 OTA 平台。</p>
+                
+                <div class="arch-diagram">
+                    [ PMS Core Database ]<br>
+                    (库存/价格/订单中心)<br>
+                    ↕<br>
+                    [ Channel Manager Engine ]<br>
+                    (映射解析 / 流量控制 / 队列管理 / 容错重试)<br>
+                    ↕<br>
+                    ---------------------------------------------<br>
+                    |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>
+                    [Airbnb API]&nbsp;[Ctrip API]&nbsp;[Meituan API]&nbsp;[Others]<br>
+                </div>
+                
+                <ul>
+                    <li><strong>上行同步 (Push)</strong>：PMS 修改房价/库存 -> 触发事件 -> 推送至 OTA。</li>
+                    <li><strong>下行同步 (Pull/Webhook)</strong>：OTA 产生新订单/取消 -> Webhook 通知 PMS -> PMS 锁房/释放。</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="section" id="core">
+            <div class="section-title">3. 核心功能模块详解</div>
+            <div class="section-content">
+                
+                <h3>3.1 房源映射 (Mapping)</h3>
+                <p>建立 PMS 本地房型 (RoomType) 与 OTA 商品 (RatePlan/Listing) 的多对多关系。</p>
+                <table class="table-custom">
+                    <tr><th>映射类型</th><th>描述</th><th>适用场景</th></tr>
+                    <tr><td>1 对 1</td><td>1 个本地房型对应 1 个 OTA 房源</td><td>独栋、单库存房源</td></tr>
+                    <tr><td>1 对 N</td><td>1 个本地房型对应多个 OTA 链接（不同标题/价格策略）</td><td>为了获取更多流量，同一房间挂多个链接</td></tr>
+                    <tr><td>N 对 1</td><td>多个本地房间对应 1 个 OTA 链接（库存池）</td><td>酒店式公寓，同房型多库存</td></tr>
+                </table>
+
+                <h3>3.2 库存同步 (Inventory Sync)</h3>
+                <p>核心逻辑：<code>OTA 可售库存 = PMS 物理库存 - 已预订 - 维修/保留</code></p>
+                <ul>
+                    <li>支持<strong>实时库存计算</strong>：本地落单瞬间，立即计算剩余库存并推送到所有已连接渠道。</li>
+                    <li>支持<strong>保留房策略</strong>：可设置“渠道最低保留库存”，防止完全超售。</li>
+                </ul>
+
+                <h3>3.3 价格同步 (Rate Sync)</h3>
+                <p>支持基准价格 (Base Rate) + 渠道加价策略。</p>
+                <p><code>OTA 最终价 = PMS 基准价 * (1 + 渠道加价率%) + 固定附加费</code></p>
+            </div>
+        </div>
+        
+        <div class="section" id="platform">
+            <div class="section-title">4. 各平台对接策略</div>
+            <div class="section-content">
+                
+                <div style="margin-bottom: 30px;">
+                    <h3><i class="fab fa-airbnb" style="color: #FF5A5F;"></i> Airbnb 爱彼迎</h3>
+                    <p><span class="tag tag-api">Official API</span> <span class="tag tag-ical">iCal (备用)</span></p>
+                    <ul>
+                        <li><strong>对接方式</strong>：使用 Airbnb Official Partner API。</li>
+                        <li><strong>核心接口</strong>：Availability API (库存), Pricing API (价格), Reservation Webhook (订单)。</li>
+                        <li><strong>注意事项</strong>：Airbnb 强制要求价格一致性（但这可以通过设置 cleaning fee 规避），需处理 Instant Book (闪订) 和 Request to Book (申请订) 两种模式。</li>
+                    </ul>
+                </div>
+
+                <div style="margin-bottom: 30px;">
+                    <h3><i class="fas fa-tripadvisor" style="color: #2979FF;"></i> 携程 (Ctrip/Trip.com)</h3>
+                    <p><span class="tag tag-api">直连 API</span></p>
+                    <ul>
+                        <li><strong>对接方式</strong>：携程酒店直连标准接口 (EBK Interface)。</li>
+                        <li><strong>核心接口</strong>：ARI Push (Availability, Rate, Inventory), Order Booking (落单)。</li>
+                        <li><strong>注意事项</strong>：携程对确认时效要求极高，需确保接口响应速度在秒级，否则会被降权。支持“保留房”协议。</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3><i class="fas fa-cat" style="color: #FFC107;"></i> 美团民宿</h3>
+                    <p><span class="tag tag-api">榛果 API</span></p>
+                    <ul>
+                        <li><strong>对接方式</strong>：美团民宿开放平台 API。</li>
+                        <li><strong>特性</strong>：主要关注库存同步，价格同步策略需符合美团的价格竞争力要求。</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section" id="risk">
+            <div class="section-title">5. 异常处理与风控机制</div>
+            <div class="section-content">
+                <ul>
+                    <li><strong>并发超售熔断</strong>：当库存仅剩 1 间时，若 1 秒内收到多个渠道的预订请求，系统按时间戳接受第一个，其余自动触发“拒单”或“搬单”流程，并向运营人员发送紧急告警。</li>
+                    <li><strong>API 降级保护</strong>：若某 OTA 接口连续超时或报错，系统自动将该渠道标记为“同步异常”，并暂时停止推送，避免阻塞其他渠道同步，待恢复后自动重试。</li>
+                    <li><strong>掉单监控</strong>：通过定时拉取 (Polling) 机制作为 Webhook 的补充，每 15 分钟主动拉取一次 OTA 订单列表，比对本地订单，防止 Webhook 丢失导致的漏单。</li>
+                </ul>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 60px; color: #999; border-top: 1px solid #eee; padding-top: 20px;">
+            &copy; 2023 宝寓 PMS 产品团队 | 内部绝密资料
+        </div>
+    </div>
+
+</body>
+</html>

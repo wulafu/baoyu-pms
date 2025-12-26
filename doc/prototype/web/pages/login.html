@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>宝寓 PMS - 登录</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body { background: #f0f2f5; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .login-container { display: flex; width: 900px; height: 550px; background: #fff; box-shadow: 0 4px 24px rgba(0,0,0,0.1); border-radius: 8px; overflow: hidden; }
+        .login-banner { flex: 1; background: linear-gradient(135deg, #00BFA5 0%, #00897B 100%); display: flex; flex-direction: column; justify-content: center; align-items: center; color: #fff; padding: 40px; }
+        .login-form-container { flex: 1; padding: 40px; display: flex; flex-direction: column; justify-content: center; }
+        
+        .brand-title { font-size: 32px; font-weight: bold; margin-bottom: 16px; }
+        .brand-desc { font-size: 16px; opacity: 0.9; text-align: center; line-height: 1.6; }
+        
+        .form-title { font-size: 24px; font-weight: bold; color: #333; margin-bottom: 32px; }
+        .input-group { margin-bottom: 24px; position: relative; }
+        .input-icon { position: absolute; left: 12px; top: 12px; color: #999; }
+        .form-input { width: 100%; padding: 10px 10px 10px 36px; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 14px; transition: all 0.3s; }
+        .form-input:focus { border-color: #00BFA5; outline: none; box-shadow: 0 0 0 2px rgba(0,191,165,0.2); }
+        
+        .login-btn { width: 100%; padding: 12px; background: #00BFA5; color: #fff; border: none; border-radius: 4px; font-size: 16px; font-weight: bold; cursor: pointer; transition: background 0.3s; }
+        .login-btn:hover { background: #00897B; }
+        
+        .form-footer { margin-top: 16px; display: flex; justify-content: space-between; font-size: 14px; color: #666; }
+        .link { color: #00BFA5; cursor: pointer; text-decoration: none; }
+        
+        .tab-switch { display: flex; margin-bottom: 24px; border-bottom: 1px solid #eee; }
+        .tab-item { padding: 12px 24px; cursor: pointer; color: #666; font-weight: 600; border-bottom: 2px solid transparent; }
+        .tab-item.active { color: #00BFA5; border-bottom-color: #00BFA5; }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <div class="login-banner">
+            <div class="brand-title"><i class="fas fa-hotel"></i> 宝寓 PMS</div>
+            <div class="brand-desc">
+                专业的民宿管理系统<br>
+                连接无限可能，让经营更简单
+            </div>
+            <div style="margin-top: 40px; font-size: 80px; opacity: 0.2;">
+                <i class="fas fa-chart-line"></i>
+            </div>
+        </div>
+        
+        <div class="login-form-container">
+            <div class="tab-switch">
+                <div class="tab-item active" onclick="switchTab('login')">账号登录</div>
+                <div class="tab-item" onclick="switchTab('register')">注册账户</div>
+            </div>
+            
+            <!-- Login Form -->
+            <div id="loginForm">
+                <div class="form-title">欢迎回来</div>
+                <div class="input-group">
+                    <i class="fas fa-user input-icon"></i>
+                    <input type="text" class="form-input" placeholder="请输入手机号/账号" value="admin">
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-lock input-icon"></i>
+                    <input type="password" class="form-input" placeholder="请输入密码" value="123456">
+                </div>
+                <button class="login-btn" onclick="handleLogin()">登 录</button>
+                <div class="form-footer">
+                    <label><input type="checkbox"> 记住我</label>
+                    <a href="#" class="link">忘记密码？</a>
+                </div>
+            </div>
+            
+            <!-- Register Form (Hidden) -->
+            <div id="registerForm" style="display: none;">
+                <div class="form-title">创建账户</div>
+                <div class="input-group">
+                    <i class="fas fa-mobile-alt input-icon"></i>
+                    <input type="text" class="form-input" placeholder="请输入手机号">
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-envelope input-icon"></i>
+                    <input type="text" class="form-input" placeholder="请输入验证码">
+                    <span class="link" style="position: absolute; right: 12px; top: 12px; font-size: 12px;">获取验证码</span>
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-lock input-icon"></i>
+                    <input type="password" class="form-input" placeholder="设置密码">
+                </div>
+                <button class="login-btn" onclick="handleRegister()">立即注册</button>
+                <div class="form-footer">
+                    <span>注册即代表同意 <a href="#" class="link">《服务条款》</a></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(type) {
+            const tabs = document.querySelectorAll('.tab-item');
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
+            
+            if (type === 'login') {
+                tabs[0].classList.add('active');
+                tabs[1].classList.remove('active');
+                loginForm.style.display = 'block';
+                registerForm.style.display = 'none';
+            } else {
+                tabs[0].classList.remove('active');
+                tabs[1].classList.add('active');
+                loginForm.style.display = 'none';
+                registerForm.style.display = 'block';
+            }
+        }
+
+        function handleLogin() {
+            const btn = document.querySelector('#loginForm .login-btn');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 登录中...';
+            setTimeout(() => {
+                window.location.href = 'dashboard.html';
+            }, 1000);
+        }
+
+        function handleRegister() {
+            const btn = document.querySelector('#registerForm .login-btn');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 注册中...';
+            setTimeout(() => {
+                alert('注册成功，请登录');
+                switchTab('login');
+                btn.innerHTML = '立即注册';
+            }, 1000);
+        }
+    </script>
+</body>
+</html>

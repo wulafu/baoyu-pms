@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>宝寓 PMS - 渠道直连</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        .channel-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; }
+        .channel-card { background: #fff; border: 1px solid #eee; border-radius: 8px; padding: 24px; transition: all 0.3s; display: flex; flex-direction: column; justify-content: space-between; height: 180px; }
+        .channel-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-color: transparent; }
+        
+        .channel-header { display: flex; align-items: center; margin-bottom: 16px; }
+        .channel-logo { width: 48px; height: 48px; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 24px; color: #fff; margin-right: 16px; }
+        .channel-name { font-size: 18px; font-weight: bold; color: #333; }
+        .channel-status { font-size: 12px; margin-top: 4px; color: #999; }
+        
+        .sync-stats { display: flex; gap: 16px; font-size: 12px; color: #666; margin-bottom: 16px; }
+        .stat-item i { margin-right: 4px; }
+        
+        .card-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #f5f5f5; padding-top: 16px; margin-top: auto; }
+        
+        .switch { position: relative; display: inline-block; width: 40px; height: 20px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 2px; bottom: 2px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: #00BFA5; }
+        input:checked + .slider:before { transform: translateX(20px); }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <i class="fas fa-hotel"></i> 宝寓 PMS
+        </div>
+        <div class="menu">
+            <div class="menu-item" onclick="loadPage('dashboard.html')">
+                <i class="fas fa-tachometer-alt"></i> 工作台
+            </div>
+            <div class="menu-item" onclick="loadPage('calendar.html')">
+                <i class="far fa-calendar-alt"></i> 房态日历
+            </div>
+            <div class="menu-item" onclick="loadPage('orders.html')">
+                <i class="fas fa-list"></i> 订单管理
+            </div>
+            <div class="menu-item active" onclick="loadPage('channels.html')">
+                <i class="fas fa-network-wired"></i> 渠道直连
+            </div>
+            <div class="menu-item" onclick="loadPage('report.html')">
+                <i class="fas fa-chart-bar"></i> 经营报表
+            </div>
+            <div class="menu-item" onclick="loadPage('settings.html')">
+                <i class="fas fa-cog"></i> 系统设置
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main">
+        <div class="header">
+            <div class="breadcrumb">
+                <i class="fas fa-home"></i> / 渠道管理 / 直连设置
+            </div>
+            <div class="user-profile">
+                <i class="far fa-bell" style="font-size: 18px; margin-right: 16px;"></i>
+                <div class="avatar"><i class="fas fa-user"></i></div>
+                <span>管理员</span>
+            </div>
+        </div>
+
+        <div class="content-wrapper">
+            <div class="card" style="margin-bottom: 24px;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <h2 style="margin: 0 0 8px 0;">全渠道直连管理</h2>
+                        <div style="color: #666; font-size: 14px;">一键同步房态、价格至所有主流 OTA 平台，告别手动关房烦恼。</div>
+                        <div style="margin-top: 12px; display: flex; gap: 12px;">
+                            <a href="solution_doc.html" class="text-primary" style="font-size: 13px; text-decoration: underline;"><i class="fas fa-book"></i> 查看完整直连解决方案</a>
+                            <a href="sync_logs.html" class="text-primary" style="font-size: 13px; text-decoration: underline;"><i class="fas fa-terminal"></i> 实时同步日志监控</a>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary"><i class="fas fa-plus"></i> 添加新渠道</button>
+                </div>
+            </div>
+
+            <div class="channel-grid">
+                <!-- Airbnb -->
+                <div class="channel-card">
+                    <div>
+                        <div class="channel-header">
+                            <div class="channel-logo" style="background: #FF5A5F;"><i class="fab fa-airbnb"></i></div>
+                            <div>
+                                <div class="channel-name">Airbnb 爱彼迎</div>
+                                <div class="channel-status" style="color: #52c41a;"><i class="fas fa-circle" style="font-size: 8px;"></i> 连接正常</div>
+                            </div>
+                        </div>
+                        <div class="sync-stats">
+                            <span class="stat-item"><i class="fas fa-bed"></i> 4个房源</span>
+                            <span class="stat-item"><i class="fas fa-sync"></i> 实时同步</span>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                        <button class="btn btn-default btn-sm" style="width: auto; padding: 4px 12px;" onclick="loadPage('channel_config.html')">配置</button>
+                    </div>
+                </div>
+                        <label class="switch">
+                            <input type="checkbox" checked onchange="showWebToast('Airbnb 同步状态已更新')">
+                            <span class="slider"></span>
+                        </label>
+                        <button class="btn btn-default btn-sm" style="padding: 4px 12px; font-size: 12px;">配置映射</button>
+                    </div>
+                </div>
+
+                <!-- Ctrip -->
+                <div class="channel-card">
+                    <div>
+                        <div class="channel-header">
+                            <div class="channel-logo" style="background: #2979FF;"><i class="fas fa-tripadvisor"></i></div>
+                            <div>
+                                <div class="channel-name">携程旅行</div>
+                                <div class="channel-status" style="color: #52c41a;"><i class="fas fa-circle" style="font-size: 8px;"></i> 连接正常</div>
+                            </div>
+                        </div>
+                        <div class="sync-stats">
+                            <span class="stat-item"><i class="fas fa-bed"></i> 4个房源</span>
+                            <span class="stat-item"><i class="fas fa-sync"></i> 实时同步</span>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <label class="switch">
+                            <input type="checkbox" checked onchange="showWebToast('携程同步状态已更新')">
+                            <span class="slider"></span>
+                        </label>
+                        <button class="btn btn-default btn-sm" style="padding: 4px 12px; font-size: 12px;">配置映射</button>
+                    </div>
+                </div>
+
+                <!-- Meituan -->
+                <div class="channel-card" style="border-color: #ffccc7; background: #fff1f0;">
+                    <div>
+                        <div class="channel-header">
+                            <div class="channel-logo" style="background: #FFC107;"><i class="fas fa-cat"></i></div>
+                            <div>
+                                <div class="channel-name">美团民宿</div>
+                                <div class="channel-status" style="color: #f5222d;"><i class="fas fa-exclamation-circle"></i> 授权过期</div>
+                            </div>
+                        </div>
+                        <div class="sync-stats">
+                            <span class="stat-item"><i class="fas fa-bed"></i> 4个房源</span>
+                            <span class="stat-item"><i class="fas fa-pause-circle"></i> 同步暂停</span>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <label class="switch">
+                            <input type="checkbox" disabled>
+                            <span class="slider" style="background: #ddd;"></span>
+                        </label>
+                        <button class="btn btn-primary btn-sm" style="padding: 4px 12px; font-size: 12px; background: #f5222d;">重新授权</button>
+                    </div>
+                </div>
+
+                <!-- Tujia -->
+                <div class="channel-card">
+                    <div>
+                        <div class="channel-header">
+                            <div class="channel-logo" style="background: #FF5722;"><i class="fas fa-home"></i></div>
+                            <div>
+                                <div class="channel-name">途家民宿</div>
+                                <div class="channel-status" style="color: #999;">未连接</div>
+                            </div>
+                        </div>
+                        <div class="sync-stats">
+                            <span class="stat-item">暂无房源同步</span>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <label class="switch">
+                            <input type="checkbox" disabled>
+                            <span class="slider" style="background: #ddd;"></span>
+                        </label>
+                        <button class="btn btn-primary btn-sm" style="padding: 4px 12px; font-size: 12px;">去连接</button>
+                    </div>
+                </div>
+                
+                <!-- Booking.com -->
+                <div class="channel-card">
+                    <div>
+                        <div class="channel-header">
+                            <div class="channel-logo" style="background: #003580;"><i class="fas fa-globe-europe"></i></div>
+                            <div>
+                                <div class="channel-name">Booking.com</div>
+                                <div class="channel-status" style="color: #999;">未连接</div>
+                            </div>
+                        </div>
+                        <div class="sync-stats">
+                            <span class="stat-item">暂无房源同步</span>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <label class="switch">
+                            <input type="checkbox" disabled>
+                            <span class="slider" style="background: #ddd;"></span>
+                        </label>
+                        <button class="btn btn-primary btn-sm" style="padding: 4px 12px; font-size: 12px;">去连接</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/app.js"></script>
+</body>
+</html>

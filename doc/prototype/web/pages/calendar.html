@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>宝寓 PMS - 后台管理系统</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <i class="fas fa-hotel"></i> 宝寓 PMS
+        </div>
+        <div class="menu">
+            <div class="menu-item" onclick="loadPage('dashboard.html')">
+                <i class="fas fa-tachometer-alt"></i> 工作台
+            </div>
+            <div class="menu-item active" onclick="loadPage('calendar.html')">
+                <i class="far fa-calendar-alt"></i> 房态日历
+            </div>
+            <div class="menu-item" onclick="loadPage('orders.html')">
+                <i class="fas fa-list"></i> 订单管理
+            </div>
+            <div class="menu-item" onclick="loadPage('channels.html')">
+                <i class="fas fa-network-wired"></i> 渠道直连
+            </div>
+            <div class="menu-item" onclick="loadPage('report.html')">
+                <i class="fas fa-chart-bar"></i> 经营报表
+            </div>
+            <div class="menu-item" onclick="loadPage('settings.html')">
+                <i class="fas fa-cog"></i> 系统设置
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main">
+        <!-- Header -->
+        <div class="header">
+            <div class="breadcrumb">
+                <i class="fas fa-home"></i> / 房态管理 / 房态日历
+            </div>
+            <div class="user-profile">
+                <i class="far fa-bell" style="font-size: 18px; margin-right: 16px;"></i>
+                <div class="avatar"><i class="fas fa-user"></i></div>
+                <span>管理员</span>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="content-wrapper">
+            <div class="card" style="margin-bottom: 16px; padding: 16px;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div style="display: flex; align-items: center; gap: 16px;">
+                        <button class="btn btn-default"><i class="fas fa-chevron-left"></i></button>
+                        <span style="font-size: 18px; font-weight: bold;">2023年 10月</span>
+                        <button class="btn btn-default"><i class="fas fa-chevron-right"></i></button>
+                        <button class="btn btn-default">回到今天</button>
+                    </div>
+                    
+                    <div style="display: flex; gap: 12px;">
+                        <button class="btn btn-default"><i class="fas fa-sync-alt"></i> 刷新</button>
+                        <button class="btn btn-primary"><i class="fas fa-plus"></i> 新建订单</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="calendar-wrapper">
+                <!-- Room Column -->
+                <div class="room-column">
+                    <div class="room-header">房间</div>
+                    <div class="room-item">
+                        <div>101</div>
+                        <div style="font-size: 12px; color: #999;">大床房</div>
+                    </div>
+                    <div class="room-item">
+                        <div>102</div>
+                        <div style="font-size: 12px; color: #999;">亲子房</div>
+                    </div>
+                    <div class="room-item">
+                        <div>201</div>
+                        <div style="font-size: 12px; color: #999;">双床房</div>
+                    </div>
+                     <div class="room-item">
+                        <div>202</div>
+                        <div style="font-size: 12px; color: #999;">特惠房</div>
+                    </div>
+                </div>
+
+                <!-- Date Grid -->
+                <div class="date-row">
+                    <div class="date-header-row">
+                        <div class="date-cell">10-24<br>周二</div>
+                        <div class="date-cell">10-25<br>周三</div>
+                        <div class="date-cell">10-26<br>周四</div>
+                        <div class="date-cell">10-27<br>周五</div>
+                        <div class="date-cell" style="color: #FF5252;">10-28<br>周六</div>
+                        <div class="date-cell" style="color: #FF5252;">10-29<br>周日</div>
+                        <div class="date-cell">10-30<br>周一</div>
+                    </div>
+
+                    <div class="grid-body">
+                        <!-- Row 101 -->
+                        <div class="grid-row">
+                            <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+                            <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+                            
+                            <!-- Airbnb Order -->
+                            <div class="web-order-block" style="left: 10px; width: 190px; background: #FF5A5F;" onclick="showWebToast('查看 Airbnb 订单详情')">
+                                <div style="display: flex; justify-content: space-between;">
+                                    <strong>王先生</strong>
+                                    <span>¥ 899</span>
+                                </div>
+                                <div style="font-size: 10px; opacity: 0.9;">
+                                    <i class="fab fa-airbnb"></i> Airbnb · 待入住
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Row 102 -->
+                        <div class="grid-row">
+                            <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+                            <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+                            
+                            <!-- Ctrip Order -->
+                            <div class="web-order-block" style="left: 110px; width: 290px; background: #2979FF;" onclick="showWebToast('查看携程订单详情')">
+                                <div style="display: flex; justify-content: space-between;">
+                                    <strong>张小凡</strong>
+                                    <span>¥ 1280</span>
+                                </div>
+                                <div style="font-size: 10px; opacity: 0.9;">
+                                    <i class="fas fa-tripadvisor"></i> 携程 · 已入住
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Row 201 -->
+                        <div class="grid-row">
+                             <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+                            <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+                        </div>
+                        
+                         <!-- Row 202 -->
+                        <div class="grid-row">
+                             <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+                            <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+                             <!-- Meituan Order -->
+                            <div class="web-order-block" style="left: 310px; width: 90px; background: #FFC107; color: #333;" onclick="showWebToast('查看美团订单详情')">
+                                <div style="display: flex; justify-content: space-between;">
+                                    <strong>李..</strong>
+                                    <span>¥ 300</span>
+                                </div>
+                                <div style="font-size: 10px; opacity: 0.9;">
+                                    <i class="fas fa-cat"></i> 美团
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/app.js"></script>
+</body>
+</html>

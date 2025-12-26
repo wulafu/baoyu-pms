@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <title>住客端 - 入住指南 (Check-in Guide)</title>
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+          Helvetica, Arial, sans-serif;
+        background: #f0f2f5;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+      }
+      .device {
+        width: 375px;
+        height: 812px;
+        background: #fff;
+        border-radius: 40px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        position: relative;
+        overflow: hidden;
+        border: 12px solid #333;
+      }
+      .notch {
+        width: 150px;
+        height: 30px;
+        background: #333;
+        border-radius: 0 0 20px 20px;
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 100;
+      }
+
+      /* Header */
+      .header {
+        background: #fff;
+        padding: 50px 20px 16px;
+        border-bottom: 1px solid #f5f5f5;
+        text-align: center;
+        position: relative;
+      }
+      .header h1 {
+        font-size: 18px;
+        margin: 0;
+        color: #333;
+      }
+      .back-btn {
+        position: absolute;
+        left: 20px;
+        top: 52px;
+        font-size: 18px;
+        color: #333;
+      }
+
+      /* Content */
+      .content {
+        padding: 20px;
+        overflow-y: scroll;
+        height: calc(100% - 100px);
+        background: #f9f9f9;
+      }
+
+      /* Welcome Card */
+      .welcome-card {
+        background: #fff;
+        padding: 20px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+        text-align: center;
+      }
+      .welcome-title {
+        font-size: 16px;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 8px;
+      }
+      .welcome-sub {
+        font-size: 12px;
+        color: #666;
+      }
+
+      /* Smart Lock Card (Key Feature) */
+      .lock-card {
+        background: linear-gradient(135deg, #00bfa5 0%, #009688 100%);
+        padding: 24px;
+        border-radius: 16px;
+        margin-bottom: 20px;
+        color: #fff;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 8px 20px rgba(0, 191, 165, 0.3);
+      }
+      .lock-icon {
+        font-size: 32px;
+        margin-bottom: 12px;
+        opacity: 0.9;
+      }
+      .lock-title {
+        font-size: 14px;
+        opacity: 0.9;
+        margin-bottom: 16px;
+        letter-spacing: 1px;
+      }
+      .password-display {
+        font-size: 48px;
+        font-weight: 800;
+        letter-spacing: 4px;
+        font-family: 'Courier New', monospace;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      }
+      .lock-tip {
+        font-size: 10px;
+        margin-top: 12px;
+        opacity: 0.7;
+        background: rgba(0, 0, 0, 0.1);
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 20px;
+      }
+
+      /* Map Card */
+      .card {
+        background: #fff;
+        border-radius: 12px;
+        margin-bottom: 16px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+      }
+      .card-header {
+        padding: 16px;
+        border-bottom: 1px solid #f5f5f5;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .card-title {
+        font-size: 14px;
+        font-weight: 700;
+        color: #333;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .map-placeholder {
+        height: 120px;
+        background: #e0e0e0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #999;
+        font-size: 12px;
+        position: relative;
+      }
+      .map-overlay {
+        position: absolute;
+        bottom: 12px;
+        right: 12px;
+        background: #2979ff;
+        color: #fff;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        box-shadow: 0 4px 10px rgba(41, 121, 255, 0.3);
+      }
+      .address-text {
+        padding: 12px 16px;
+        font-size: 13px;
+        color: #666;
+        line-height: 1.4;
+      }
+
+      /* WiFi Card */
+      .wifi-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 16px;
+        align-items: center;
+      }
+      .wifi-info {
+        display: flex;
+        flex-direction: column;
+      }
+      .wifi-ssid {
+        font-size: 14px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 4px;
+      }
+      .wifi-pwd {
+        font-size: 12px;
+        color: #999;
+      }
+      .copy-btn {
+        border: 1px solid #ddd;
+        color: #666;
+        padding: 4px 12px;
+        border-radius: 12px;
+        font-size: 10px;
+      }
+
+      /* Guide List */
+      .guide-item {
+        padding: 16px;
+        border-bottom: 1px solid #f5f5f5;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .guide-item:last-child {
+        border-bottom: none;
+      }
+      .guide-text {
+        font-size: 14px;
+        color: #333;
+      }
+      .guide-arrow {
+        color: #ccc;
+        font-size: 12px;
+      }
+    </style>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="device">
+      <div class="notch"></div>
+
+      <div class="header">
+        <i class="fas fa-chevron-left back-btn"></i>
+        <h1>入住指南</h1>
+      </div>
+
+      <div class="content">
+        <div class="welcome-card">
+          <div class="welcome-title">欢迎入住云栖·山隐 🏡</div>
+          <div class="welcome-sub">祝您拥有一个愉快的假期！</div>
+        </div>
+
+        <!-- Lock Password -->
+        <div class="lock-card">
+          <i class="fas fa-lock lock-icon"></i>
+          <div class="lock-title">智能门锁密码</div>
+          <div class="password-display">8829#</div>
+          <div class="lock-tip">有效时间: 10.24 14:00 - 10.25 12:00</div>
+        </div>
+
+        <!-- Map -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <i class="fas fa-map-marker-alt" style="color: #ff5252"></i>
+              导航位置
+            </div>
+          </div>
+          <div class="map-placeholder">
+            [地图组件占位]
+            <div class="map-overlay">
+              <i class="fas fa-location-arrow"></i>
+              一键导航
+            </div>
+          </div>
+          <div class="address-text">
+            浙江省杭州市西湖区满觉陇路88号 (靠近少儿公园入口)
+          </div>
+        </div>
+
+        <!-- WiFi -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <i class="fas fa-wifi" style="color: #2979ff"></i>
+              Wi-Fi 连接
+            </div>
+          </div>
+          <div class="wifi-row">
+            <div class="wifi-info">
+              <div class="wifi-ssid">YunQi_Guest_5G</div>
+              <div class="wifi-pwd">密码: 88889999</div>
+            </div>
+            <button class="copy-btn">复制密码</button>
+          </div>
+        </div>
+
+        <!-- Guides -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <i class="fas fa-book-open" style="color: #ffc107"></i>
+              设施指南
+            </div>
+          </div>
+          <div class="guide-item">
+            <span class="guide-text">♨️ 热水器使用说明</span>
+            <i class="fas fa-chevron-right guide-arrow"></i>
+          </div>
+          <div class="guide-item">
+            <span class="guide-text">🎬 投影仪连接教程</span>
+            <i class="fas fa-chevron-right guide-arrow"></i>
+          </div>
+          <div class="guide-item">
+            <span class="guide-text">🗑️ 垃圾分类指引</span>
+            <i class="fas fa-chevron-right guide-arrow"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

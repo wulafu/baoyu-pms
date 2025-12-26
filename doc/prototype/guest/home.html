@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <title>住客端 - 首页</title>
+    <link rel="stylesheet" href="../css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+    <style>
+      .hero-banner {
+        height: 200px;
+        background: url('https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80')
+          center/cover;
+        position: relative;
+        color: #fff;
+        display: flex;
+        align-items: flex-end;
+        padding: 20px;
+      }
+      .hero-gradient {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 100px;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.6), transparent);
+      }
+      .hero-content {
+        position: relative;
+        z-index: 1;
+      }
+      .hero-title {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 4px;
+      }
+
+      .search-bar {
+        margin: -24px 16px 16px;
+        background: #fff;
+        padding: 16px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        position: relative;
+        z-index: 2;
+      }
+      .search-input {
+        display: flex;
+        align-items: center;
+        padding: 12px;
+        background: #f5f5f5;
+        border-radius: 8px;
+        margin-bottom: 12px;
+      }
+
+      .category-scroll {
+        display: flex;
+        gap: 16px;
+        overflow-x: auto;
+        padding: 0 16px 16px;
+      }
+      .category-item {
+        min-width: 80px;
+        text-align: center;
+      }
+      .cat-icon {
+        width: 50px;
+        height: 50px;
+        background: #f0f0f0;
+        border-radius: 16px;
+        margin: 0 auto 8px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 20px;
+      }
+
+      .room-card {
+        margin: 0 16px 24px;
+        border-radius: 12px;
+        overflow: hidden;
+        background: #fff;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      }
+      .room-img {
+        height: 180px;
+        background: #eee;
+        position: relative;
+      }
+      .room-tag {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        background: rgba(0, 0, 0, 0.6);
+        color: #fff;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 10px;
+      }
+      .room-info {
+        padding: 16px;
+      }
+      .room-title {
+        font-size: 16px;
+        font-weight: bold;
+        margin-bottom: 4px;
+      }
+      .room-tags {
+        display: flex;
+        gap: 6px;
+        margin-bottom: 8px;
+      }
+      .tag-sm {
+        font-size: 10px;
+        padding: 2px 6px;
+        background: #f0f0f0;
+        color: #666;
+        border-radius: 4px;
+      }
+      .room-price {
+        color: #ff5a5f;
+        font-size: 18px;
+        font-weight: bold;
+      }
+
+      .bottom-nav {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 60px;
+        background: #fff;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        border-top: 1px solid #eee;
+      }
+      .nav-item {
+        text-align: center;
+        color: #999;
+        font-size: 10px;
+      }
+      .nav-item.active {
+        color: #ff5a5f;
+      }
+      .nav-icon {
+        font-size: 20px;
+        margin-bottom: 2px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="device">
+      <div class="notch"></div>
+      <div class="page-container" style="padding-bottom: 60px">
+        <div class="hero-banner">
+          <div class="hero-gradient"></div>
+          <div class="hero-content">
+            <div class="hero-title">寻找你的理想居所</div>
+            <div style="font-size: 14px; opacity: 0.9">探索独特的民宿体验</div>
+          </div>
+        </div>
+
+        <div class="search-bar">
+          <div class="search-input" onclick="showToast('选择日期')">
+            <i
+              class="far fa-calendar-alt text-primary"
+              style="margin-right: 12px"
+            ></i>
+            <div style="flex: 1">
+              <div style="font-size: 12px; color: #999">入住/离店日期</div>
+              <div style="font-weight: bold">10月26日 - 10月27日</div>
+            </div>
+          </div>
+          <button
+            class="btn"
+            style="background: #ff5a5f"
+            onclick="showToast('搜索房源')"
+          >
+            搜 索
+          </button>
+        </div>
+
+        <div class="category-scroll">
+          <div class="category-item">
+            <div class="cat-icon" style="background: #ffe0b2; color: #f57c00">
+              <i class="fas fa-home"></i>
+            </div>
+            <div style="font-size: 12px">整套</div>
+          </div>
+          <div class="category-item">
+            <div class="cat-icon" style="background: #e1bee7; color: #8e24aa">
+              <i class="fas fa-star"></i>
+            </div>
+            <div style="font-size: 12px">优选</div>
+          </div>
+          <div class="category-item">
+            <div class="cat-icon" style="background: #b2dfdb; color: #00897b">
+              <i class="fas fa-tree"></i>
+            </div>
+            <div style="font-size: 12px">山景</div>
+          </div>
+          <div class="category-item">
+            <div class="cat-icon" style="background: #ffccbc; color: #ff5722">
+              <i class="fas fa-fire"></i>
+            </div>
+            <div style="font-size: 12px">特惠</div>
+          </div>
+        </div>
+
+        <div style="padding: 16px">
+          <h3 style="margin: 0 0 16px">推荐房源</h3>
+
+          <!-- Room 1 -->
+          <div class="room-card" onclick="navigateTo('room_detail.html')">
+            <div
+              class="room-img"
+              style="
+                background: url('https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80')
+                  center/cover;
+              "
+            >
+              <div class="room-tag">超赞房东</div>
+              <div
+                style="
+                  position: absolute;
+                  bottom: 12px;
+                  right: 12px;
+                  background: #fff;
+                  padding: 4px 8px;
+                  border-radius: 12px;
+                  font-size: 12px;
+                  font-weight: bold;
+                "
+              >
+                <i class="fas fa-star" style="color: #ffc107"></i>
+                4.9
+              </div>
+            </div>
+            <div class="room-info">
+              <div class="room-title">云栖·山隐 | 270°全景落地窗山景大床房</div>
+              <div class="room-tags">
+                <span class="tag-sm">近景区</span>
+                <span class="tag-sm">智能门锁</span>
+                <span class="tag-sm">投影仪</span>
+              </div>
+              <div class="flex-row">
+                <div class="room-price">
+                  ¥ 899
+                  <span
+                    style="font-size: 12px; color: #999; font-weight: normal"
+                  >
+                    /晚
+                  </span>
+                </div>
+                <div style="font-size: 12px; color: #999">已售 128 晚</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Room 2 -->
+          <div class="room-card">
+            <div
+              class="room-img"
+              style="
+                background: url('https://images.unsplash.com/photo-1522771753035-48482f0ba411?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80')
+                  center/cover;
+              "
+            >
+              <div
+                style="
+                  position: absolute;
+                  bottom: 12px;
+                  right: 12px;
+                  background: #fff;
+                  padding: 4px 8px;
+                  border-radius: 12px;
+                  font-size: 12px;
+                  font-weight: bold;
+                "
+              >
+                <i class="fas fa-star" style="color: #ffc107"></i>
+                4.8
+              </div>
+            </div>
+            <div class="room-info">
+              <div class="room-title">云栖·童趣 | 乐高主题亲子套房/带滑梯</div>
+              <div class="room-tags">
+                <span class="tag-sm">亲子设施</span>
+                <span class="tag-sm">双卫</span>
+              </div>
+              <div class="flex-row">
+                <div class="room-price">
+                  ¥ 1,280
+                  <span
+                    style="font-size: 12px; color: #999; font-weight: normal"
+                  >
+                    /晚
+                  </span>
+                </div>
+                <div style="font-size: 12px; color: #999">已售 86 晚</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bottom-nav">
+        <div class="nav-item active">
+          <div class="nav-icon"><i class="fas fa-search"></i></div>
+          <div>探索</div>
+        </div>
+        <div class="nav-item">
+          <div class="nav-icon"><i class="far fa-heart"></i></div>
+          <div>收藏</div>
+        </div>
+        <div class="nav-item" onclick="navigateTo('guide.html')">
+          <div class="nav-icon"><i class="fas fa-key"></i></div>
+          <div>入住</div>
+        </div>
+        <div class="nav-item">
+          <div class="nav-icon"><i class="far fa-user"></i></div>
+          <div>我的</div>
+        </div>
+      </div>
+
+      <div class="home-indicator"></div>
+    </div>
+
+    <script src="../js/app.js"></script>
+  </body>
+</html>
